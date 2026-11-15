@@ -19,24 +19,18 @@ class MarketCategoryView extends StatelessWidget {
     final repo = context.watch<MarketWalletRepository>();
     final products = repo.productsForCategory(categoryId);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          categoryId == 'all' ? 'All Products' : categoryId.toUpperCase(),
+    return DuyaSubpageScaffold(
+      title: categoryId == 'all' ? 'All Products' : categoryId.toUpperCase(),
+      actions: [
+        DuyaCircleActionButton(
+          icon: Icons.shopping_bag_outlined,
+          tooltip: 'Shopping Bag',
+          badgeCount: repo.cartCount,
+          onTap: () => context.push('/market/cart'),
         ),
-        actions: [
-          IconButton(
-            onPressed: () => context.push('/market/cart'),
-            icon: Badge.count(
-              count: repo.cartCount,
-              isLabelVisible: repo.cartCount > 0,
-              child: const Icon(Icons.shopping_bag_outlined),
-            ),
-          ),
-        ],
-      ),
+      ],
       body: ListView.separated(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         itemCount: products.length,
         separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
@@ -46,13 +40,16 @@ class MarketCategoryView extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 64,
-                  height: 64,
+                  width: 58,
+                  height: 58,
                   decoration: BoxDecoration(
-                    color: Color(p.accentHex),
-                    borderRadius: BorderRadius.circular(16),
+                    color: const Color(0xFFE7F3EE),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(Icons.shopping_bag, color: Colors.white),
+                  child: const Icon(
+                    Icons.shopping_bag_outlined,
+                    color: DuyaColors.emerald,
+                  ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -63,7 +60,7 @@ class MarketCategoryView extends StatelessWidget {
                         p.localizedTitle(isArabic),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 15.5,
+                          fontSize: 13.5,
                         ),
                       ),
                       Text(p.subtitleEn),

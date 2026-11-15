@@ -5,7 +5,7 @@ import '../ui/core/widgets/duya_shell.dart';
 import '../ui/features/ai_companion/duya_ai_view.dart';
 import '../ui/features/challenge/challenge_help_view.dart';
 import '../ui/features/challenge/challenge_intro_view.dart';
-import '../ui/features/challenge/challenge_keys_view.dart';
+import '../ui/features/challenge/challenge_ilm_view.dart';
 import '../ui/features/challenge/challenge_play_view.dart';
 import '../ui/features/challenge/challenge_quiz_view.dart';
 import '../ui/features/challenge/challenge_winners_view.dart';
@@ -249,8 +249,8 @@ GoRouter createDuyaRouter({String initialLocation = '/splash'}) {
         builder: (context, state) => const ChallengeWinnersView(),
       ),
       GoRoute(
-        path: '/challenge/keys',
-        builder: (context, state) => const ChallengeKeysView(),
+        path: '/challenge/ilm',
+        builder: (context, state) => const ChallengeIlmView(),
       ),
       GoRoute(
         path: '/challenge/help',

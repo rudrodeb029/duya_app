@@ -31,14 +31,14 @@ class _DuasHubViewState extends State<DuasHubView> {
                 d.translationEn.toLowerCase().contains(_query.toLowerCase()))
             .toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Duas & Athkar')),
+    return DuyaSubpageScaffold(
+      title: 'Duas & Athkar',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           TextField(
             decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.search, color: DuyaColors.emerald),
               hintText: 'Search duas (Tawaf, Istighfar, Travel...)',
             ),
             onChanged: (v) => setState(() => _query = v),
@@ -119,15 +119,15 @@ class _DuasHubViewState extends State<DuasHubView> {
                   child: Row(
                     children: [
                       Container(
-                        width: 50,
-                        height: 50,
+                        width: 48,
+                        height: 48,
                         decoration: BoxDecoration(
-                          color: Color(cat.accentHex),
-                          borderRadius: BorderRadius.circular(16),
+                          color: const Color(0xFFE7F3EE),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(
                           Icons.volunteer_activism,
-                          color: Colors.white,
+                          color: DuyaColors.emerald,
                         ),
                       ),
                       const SizedBox(width: 14),
@@ -139,7 +139,7 @@ class _DuasHubViewState extends State<DuasHubView> {
                               cat.localizedTitle(auth.isArabic),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                             Text(

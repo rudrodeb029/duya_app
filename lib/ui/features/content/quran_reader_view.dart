@@ -39,27 +39,22 @@ class _QuranReaderViewState extends State<QuranReaderView> {
       orElse: () => repo.reciters.first,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${surah.nameEnglish} (${surah.nameArabic})'),
-        actions: [
-          IconButton(
-            tooltip: 'Toggle Tafsir notes',
-            onPressed: () => setState(() => _showTafsir = !_showTafsir),
-            icon: Icon(
-              _showTafsir ? Icons.lightbulb : Icons.lightbulb_outline,
-              color: _showTafsir ? DuyaColors.desertGold : null,
-            ),
-          ),
-        ],
-      ),
+    return DuyaSubpageScaffold(
+      title: '${surah.nameEnglish} (${surah.nameArabic})',
+      actions: [
+        DuyaCircleActionButton(
+          icon: _showTafsir ? Icons.lightbulb : Icons.lightbulb_outline,
+          tooltip: 'Toggle Tafsir notes',
+          onTap: () => setState(() => _showTafsir = !_showTafsir),
+        ),
+      ],
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                const Text('Arabic Size', style: TextStyle(fontSize: 12)),
+                const Text('Arabic Size', style: TextStyle(fontSize: 10.5)),
                 Expanded(
                   child: Slider(
                     value: _arabicFontSize,
@@ -76,7 +71,7 @@ class _QuranReaderViewState extends State<QuranReaderView> {
           ),
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
               itemCount: surah.ayahs.length,
               separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
@@ -92,12 +87,12 @@ class _QuranReaderViewState extends State<QuranReaderView> {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 14,
+                            radius: 13,
                             backgroundColor: DuyaColors.desertGoldSoft,
                             child: Text(
                               '${ayah.ayahNumber}',
                               style: const TextStyle(
-                                fontSize: 12,
+                                fontSize: 10.5,
                                 fontWeight: FontWeight.w700,
                                 color: DuyaColors.emerald,
                               ),
@@ -153,7 +148,7 @@ class _QuranReaderViewState extends State<QuranReaderView> {
                           ),
                           child: Text(
                             'Reflection: ${ayah.tafsirNote}',
-                            style: const TextStyle(fontSize: 12.5),
+                            style: const TextStyle(fontSize: 11),
                           ),
                         ),
                       ],
@@ -163,20 +158,29 @@ class _QuranReaderViewState extends State<QuranReaderView> {
               },
             ),
           ),
-          // Persistent Qari Audio Bar
+          // Persistent Qari Audio Bar (daylight crisp bar matching DuyaShell)
           Container(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 18),
-            decoration: const BoxDecoration(
-              color: DuyaColors.celestialNight,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+            decoration: BoxDecoration(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? DuyaColors.nightSurface
+                  : Colors.white,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x140E523C),
+                  blurRadius: 18,
+                  offset: Offset(0, -4),
+                ),
+              ],
             ),
             child: SafeArea(
               top: false,
               child: Row(
                 children: [
                   const CircleAvatar(
-                    backgroundColor: DuyaColors.desertGold,
-                    child: Icon(Icons.headphones, color: Colors.white),
+                    backgroundColor: Color(0xFFE7F3EE),
+                    child: Icon(Icons.headphones, color: DuyaColors.emerald),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -187,7 +191,6 @@ class _QuranReaderViewState extends State<QuranReaderView> {
                         Text(
                           reciter.nameEn,
                           style: const TextStyle(
-                            color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -195,10 +198,10 @@ class _QuranReaderViewState extends State<QuranReaderView> {
                           _isPlaying
                               ? 'Reciting Ayah ${surah.ayahs[_activeAyahIdx].ayahNumber}...'
                               : 'Tap play to listen to ${surah.nameEnglish}',
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontSize: 10.5),
                         ),
                       ],
                     ),
@@ -209,7 +212,7 @@ class _QuranReaderViewState extends State<QuranReaderView> {
                       _isPlaying
                           ? Icons.pause_circle_filled
                           : Icons.play_circle_filled,
-                      color: DuyaColors.desertGold,
+                      color: DuyaColors.emerald,
                       size: 40,
                     ),
                   ),

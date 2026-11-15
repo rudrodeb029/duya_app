@@ -21,7 +21,10 @@ class ChallengeHelpView extends StatelessWidget {
         children: [
           Text(
             'Support center',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
           ),
           const SizedBox(height: 14),
           ...repo.faqs.map(
@@ -35,7 +38,7 @@ class ChallengeHelpView extends StatelessWidget {
                     faq.question,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 14.5,
+                      fontSize: 13,
                     ),
                   ),
                   children: [
@@ -49,7 +52,7 @@ class ChallengeHelpView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-          const Text('Customer care', style: TextStyle(fontSize: 13)),
+          const Text('Customer care', style: TextStyle(fontSize: 11.5)),
           Text(
             'We’re here for you',
             style: Theme.of(context).textTheme.headlineSmall,
@@ -62,7 +65,7 @@ class ChallengeHelpView extends StatelessWidget {
               title: Text('Inside Saudi Arabia 24/7'),
               subtitle: Text(
                 '1966',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
               ),
             ),
           ),
@@ -74,7 +77,7 @@ class ChallengeHelpView extends StatelessWidget {
               title: Text('Outside Saudi Arabia 24/7'),
               subtitle: Text(
                 '+966 9200 02814',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
               ),
             ),
           ),
@@ -86,7 +89,7 @@ class ChallengeHelpView extends StatelessWidget {
               title: Text('Email Support'),
               subtitle: Text(
                 'care@duya.app',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
               ),
             ),
           ),

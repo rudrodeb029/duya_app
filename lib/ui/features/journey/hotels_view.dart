@@ -24,10 +24,10 @@ class _HotelsViewState extends State<HotelsView> {
         ? repo.hotels
         : repo.hotels.where((h) => h.city == _city).toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Haram-Side Hotels')),
+    return DuyaSubpageScaffold(
+      title: 'Haram-Side Hotels',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           Wrap(
             spacing: 8,
@@ -55,10 +55,13 @@ class _HotelsViewState extends State<HotelsView> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: Color(h.accentHex),
-                            borderRadius: BorderRadius.circular(14),
+                            color: const Color(0xFFE7F3EE),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(Icons.hotel, color: Colors.white),
+                          child: const Icon(
+                            Icons.hotel,
+                            color: DuyaColors.emerald,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -69,7 +72,7 @@ class _HotelsViewState extends State<HotelsView> {
                                 h.name,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               Text('${h.city} • ${h.distanceToHaram}'),
@@ -92,7 +95,7 @@ class _HotelsViewState extends State<HotelsView> {
                       spacing: 6,
                       runSpacing: 6,
                       children: h.amenities
-                          .map((a) => Chip(label: Text(a, style: const TextStyle(fontSize: 11))))
+                          .map((a) => Chip(label: Text(a, style: const TextStyle(fontSize: 10))))
                           .toList(),
                     ),
                     const SizedBox(height: 12),
@@ -103,7 +106,7 @@ class _HotelsViewState extends State<HotelsView> {
                           style: const TextStyle(
                             color: DuyaColors.emerald,
                             fontWeight: FontWeight.w800,
-                            fontSize: 16,
+                            fontSize: 14,
                           ),
                         ),
                         const Spacer(),

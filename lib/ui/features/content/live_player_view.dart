@@ -28,75 +28,95 @@ class _LivePlayerViewState extends State<LivePlayerView> {
       orElse: () => repo.liveChannels.first,
     );
 
-    return Scaffold(
-      appBar: AppBar(title: Text(channel.mosqueName)),
+    return DuyaSubpageScaffold(
+      title: channel.mosqueName,
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
-          Container(
-            height: 220,
+          DuyaDaylightBannerCard(
+            imageAsset: 'assets/images/live_mosque_day.jpg',
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: DuyaColors.celestialHeroGradient,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
+            child: SizedBox(
+              height: 185,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD62B2B),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          _audioMode ? 'AUDIO STREAM' : 'LIVE HD',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: DuyaColors.error,
-                        borderRadius: BorderRadius.circular(14),
+                      const Spacer(),
+                      OutlinedButton.icon(
+                        onPressed: () =>
+                            setState(() => _audioMode = !_audioMode),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white.withValues(alpha: 0.9),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                        ),
+                        icon: Icon(
+                          _audioMode ? Icons.videocam_outlined : Icons.headphones,
+                          size: 16,
+                        ),
+                        label: Text(
+                          _audioMode ? 'Video View' : 'Audio Mode',
+                          style: const TextStyle(fontSize: 10.5),
+                        ),
                       ),
-                      child: Text(
-                        _audioMode ? 'AUDIO STREAM' : 'LIVE HD',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
+                    ],
+                  ),
+                  const Spacer(),
+                  Center(
+                    child: Material(
+                      color: Colors.white.withValues(alpha: 0.94),
+                      shape: const CircleBorder(),
+                      elevation: 3,
+                      shadowColor: const Color(0x220E523C),
+                      child: IconButton(
+                        onPressed: () =>
+                            setState(() => _isPlaying = !_isPlaying),
+                        icon: Icon(
+                          _isPlaying
+                              ? Icons.pause_rounded
+                              : Icons.play_arrow_rounded,
+                          color: DuyaColors.emerald,
+                          size: 36,
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    TextButton.icon(
-                      onPressed: () => setState(() => _audioMode = !_audioMode),
-                      style: TextButton.styleFrom(foregroundColor: Colors.white),
-                      icon: Icon(
-                        _audioMode ? Icons.videocam_outlined : Icons.headphones,
+                  ),
+                  const Spacer(),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 220),
+                    child: Text(
+                      channel.titleEn,
+                      style: const TextStyle(
+                        color: Color(0xFF10553F),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14.5,
                       ),
-                      label: Text(_audioMode ? 'Video View' : 'Audio Mode'),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Center(
-                  child: IconButton(
-                    onPressed: () => setState(() => _isPlaying = !_isPlaying),
-                    icon: Icon(
-                      _isPlaying
-                          ? Icons.pause_circle_filled
-                          : Icons.play_circle_filled,
-                      color: DuyaColors.desertGold,
-                      size: 62,
                     ),
                   ),
-                ),
-                const Spacer(),
-                Text(
-                  channel.titleEn,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 18),

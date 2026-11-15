@@ -26,41 +26,57 @@ class _AttractionDetailViewState extends State<AttractionDetailView> {
     final item = repo.getAttractionById(widget.attractionId);
     final slot = item.availableSlots[_slotIndex];
 
-    return Scaffold(
-      appBar: AppBar(title: Text(item.title)),
+    return DuyaSubpageScaffold(
+      title: item.title,
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: Color(item.accentHex),
-              borderRadius: BorderRadius.circular(24),
-            ),
+          DuyaDaylightBannerCard(
+            imageAsset: 'assets/images/promo_madinah_hotel.jpg',
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.city.toUpperCase(),
-                  style: const TextStyle(
-                    color: DuyaColors.desertGoldSoft,
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE7F3EE),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    item.city.toUpperCase(),
+                    style: const TextStyle(
+                      color: DuyaColors.emerald,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  item.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
+                const SizedBox(height: 10),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 215),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.title,
+                        style: const TextStyle(
+                          color: Color(0xFF10553F),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          height: 1.15,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        item.subtitle,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  item.subtitle,
-                  style: const TextStyle(color: Colors.white70),
                 ),
               ],
             ),
@@ -122,7 +138,7 @@ class _AttractionDetailViewState extends State<AttractionDetailView> {
                   '$_guests',
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
                 IconButton(

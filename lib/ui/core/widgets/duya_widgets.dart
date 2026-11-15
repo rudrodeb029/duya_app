@@ -5,7 +5,8 @@ import '../../../data/repositories/auth_profile_repository.dart';
 import '../theme/duya_colors.dart';
 import 'islamic_patterns.dart';
 
-/// Signature Duya card with subtle sandstone/theme-aware border.
+/// Signature Duya daylight card with crisp 12px radius, hairline emerald border,
+/// and subtle HomeView-matched emerald shadow.
 class DuyaCard extends StatelessWidget {
   const DuyaCard({
     super.key,
@@ -22,27 +23,453 @@ class DuyaCard extends StatelessWidget {
   final VoidCallback? onTap;
   final double borderRadius;
 
+  static const lightShadow = [
+    BoxShadow(
+      color: Color(0x130E523C),
+      blurRadius: 18,
+      offset: Offset(0, 6),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor =
         color ?? (isDark ? DuyaColors.nightCard : DuyaColors.cardLight);
-    final borderColor =
-        isDark ? DuyaColors.nightBorder : DuyaColors.borderLight;
+    final isTransparent = cardColor.a == 0;
+    final borderColor = isDark
+        ? DuyaColors.nightBorder
+        : DuyaColors.emerald.withValues(alpha: isTransparent ? 0.16 : 0.09);
 
-    return Material(
-      color: cardColor,
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: InkWell(
-        onTap: onTap,
+    return Container(
+      decoration: BoxDecoration(
+        color: cardColor,
         borderRadius: BorderRadius.circular(borderRadius),
-        child: Container(
-          padding: padding,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(color: borderColor),
+        border: Border.all(color: borderColor),
+        boxShadow: (isDark || isTransparent) ? null : lightShadow,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: Padding(
+            padding: padding,
+            child: child,
           ),
-          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+/// Sunlit sage-pearl backdrop used across HomeView and all secondary pages.
+class DuyaDaylightBackground extends StatelessWidget {
+  const DuyaDaylightBackground({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (isDark) {
+      return ColoredBox(color: DuyaColors.nightCanvas, child: child);
+    }
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFFEEF4F2), Color(0xFFF3F7F5), Color(0xFFF6F9F8)],
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+/// Circular elevated white action button matching HomeView's profile button.
+class DuyaCircleActionButton extends StatelessWidget {
+  const DuyaCircleActionButton({
+    super.key,
+    required this.icon,
+    required this.onTap,
+    this.tooltip,
+    this.badgeCount = 0,
+    this.size = 40,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+  final String? tooltip;
+  final int badgeCount;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final button = Material(
+      color: isDark
+          ? DuyaColors.nightCard
+          : Colors.white.withValues(alpha: 0.94),
+      shape: const CircleBorder(),
+      elevation: isDark ? 0 : 3,
+      shadowColor: const Color(0x220E523C),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: Badge.count(
+            count: badgeCount,
+            isLabelVisible: badgeCount > 0,
+            child: Icon(
+              icon,
+              color: isDark
+                  ? DuyaColors.textPrimaryDark
+                  : const Color(0xFF136048),
+              size: 20,
+            ),
+          ),
+        ),
+      ),
+    );
+    return tooltip == null ? button : Tooltip(message: tooltip!, child: button);
+  }
+}
+
+/// Transparent quick-action header tile matching HomeView's Rawdah/Hajj row.
+class DuyaHeaderQuickTile extends StatelessWidget {
+  const DuyaHeaderQuickTile({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Expanded(
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  color: isDark
+                      ? DuyaColors.desertGoldSoft
+                      : const Color(0xFF0E5A42),
+                  size: 22,
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: isDark
+                        ? DuyaColors.textPrimaryDark
+                        : const Color(0xFF1B4332),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Daylight mosque-backdrop header shared by tabs and pushed subpages so
+/// every route shares HomeView's exact sunlit top architecture.
+class DuyaDaylightHeader extends StatelessWidget {
+  const DuyaDaylightHeader({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.showBack = true,
+    this.showLogo = false,
+    this.onBack,
+    this.actions = const [],
+    this.bottom,
+    this.bottomPadding = 12,
+  });
+
+  final String title;
+  final String? subtitle;
+  final bool showBack;
+  final bool showLogo;
+  final VoidCallback? onBack;
+  final List<Widget> actions;
+  final Widget? bottom;
+  final double bottomPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Stack(
+      children: [
+        if (!isDark)
+          Positioned.fill(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.asset(
+                  'assets/images/hero_mosque_header.jpg',
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topRight,
+                  errorBuilder: (_, _, _) => const ColoredBox(
+                    color: Color(0xFFEAF2EF),
+                  ),
+                ),
+                const DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0.0, 0.45, 0.85, 1.0],
+                      colors: [
+                        Color(0x55F3F7F5),
+                        Color(0x88F3F7F5),
+                        Color(0xE8F3F7F5),
+                        Color(0xFFF3F7F5),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 12, 16, bottomPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    if (showBack) ...[
+                      DuyaCircleActionButton(
+                        icon: Icons.arrow_back_rounded,
+                        tooltip: 'Back',
+                        onTap: onBack ??
+                            () => context.canPop()
+                                ? context.pop()
+                                : context.go('/home'),
+                      ),
+                      const SizedBox(width: 12),
+                    ] else if (showLogo) ...[
+                      const SizedBox(
+                        width: 38,
+                        height: 40,
+                        child: CustomPaint(painter: DuyaArchLogoPainter()),
+                      ),
+                      const SizedBox(width: 10),
+                    ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: isDark
+                                  ? DuyaColors.textPrimaryDark
+                                  : const Color(0xFF10553F),
+                              fontSize: 15.5,
+                              height: 1.15,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          if (subtitle != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              subtitle!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: isDark
+                                    ? DuyaColors.textSecondaryDark
+                                    : DuyaColors.textSecondaryLight,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    if (actions.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      ...actions,
+                    ],
+                  ],
+                ),
+                if (bottom != null) ...[
+                  const SizedBox(height: 14),
+                  bottom!,
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Unified daylight scaffold with HomeView's sage-pearl backdrop and sunlit header.
+class DuyaSubpageScaffold extends StatelessWidget {
+  const DuyaSubpageScaffold({
+    super.key,
+    required this.title,
+    required this.body,
+    this.subtitle,
+    this.actions = const [],
+    this.headerBottom,
+    this.bottomNavigationBar,
+    this.floatingActionButton,
+  });
+
+  final String title;
+  final String? subtitle;
+  final List<Widget> actions;
+  final Widget? headerBottom;
+  final Widget body;
+  final Widget? bottomNavigationBar;
+  final Widget? floatingActionButton;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingActionButton,
+      body: DuyaDaylightBackground(
+        child: Column(
+          children: [
+            DuyaDaylightHeader(
+              title: title,
+              subtitle: subtitle,
+              showBack: true,
+              actions: actions,
+              bottom: headerBottom,
+            ),
+            Expanded(child: body),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// HomeView-style sunlit showcase card with right-fading daylight photo & silk ribbon.
+class DuyaDaylightBannerCard extends StatelessWidget {
+  const DuyaDaylightBannerCard({
+    super.key,
+    required this.child,
+    this.imageAsset,
+    this.onTap,
+    this.showRibbon = true,
+    this.padding = const EdgeInsets.all(18),
+  });
+
+  final Widget child;
+  final String? imageAsset;
+  final VoidCallback? onTap;
+  final bool showRibbon;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? DuyaColors.nightCard : Colors.white;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDark
+              ? DuyaColors.nightBorder
+              : DuyaColors.emerald.withValues(alpha: 0.09),
+        ),
+        boxShadow: isDark ? null : DuyaCard.lightShadow,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            child: Stack(
+              children: [
+                if (imageAsset != null)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: 170,
+                    child: ShaderMask(
+                      shaderCallback: (rect) => const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        stops: [0.0, 0.35, 1.0],
+                        colors: [
+                          Colors.transparent,
+                          Colors.black87,
+                          Colors.black,
+                        ],
+                      ).createShader(rect),
+                      blendMode: BlendMode.dstIn,
+                      child: Opacity(
+                        opacity: isDark ? 0.25 : 0.92,
+                        child: Image.asset(
+                          imageAsset!,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.centerRight,
+                          errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (showRibbon)
+                  const Positioned(
+                    right: 0,
+                    bottom: 0,
+                    width: 160,
+                    height: 36,
+                    child: IgnorePointer(
+                      child: CustomPaint(painter: CardSilkRibbonPainter()),
+                    ),
+                  ),
+                Padding(padding: padding, child: child),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -114,6 +541,47 @@ class DuyaSectionHeader extends StatelessWidget {
   }
 }
 
+/// Compact golden Ilm balance pill (four-diamond emblem + count).
+class DuyaIlmChip extends StatelessWidget {
+  const DuyaIlmChip({super.key, required this.count, this.onTap});
+
+  final int count;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const IlmIcon(size: 15, color: DuyaColors.desertGold),
+              const SizedBox(width: 6),
+              Text(
+                '$count Ilm',
+                style: TextStyle(
+                  color: isDark
+                      ? DuyaColors.textPrimaryDark
+                      : const Color(0xFF10553F),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Duya geometric badge used in headers and logos.
 class DuyaLogoBadge extends StatelessWidget {
   const DuyaLogoBadge({
@@ -146,7 +614,7 @@ Future<void> showLocationPermissionSheet(
     showDragHandle: true,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (ctx) => Padding(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
@@ -208,7 +676,7 @@ Future<void> showLoginPromptSheet(BuildContext context) {
     showDragHandle: true,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (ctx) => Padding(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
@@ -301,7 +769,7 @@ Future<String?> showNationalityPickerSheet(
     isScrollControlled: true,
     showDragHandle: true,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (ctx) => _NationalityPickerContent(currentSelection: currentSelection),
   );

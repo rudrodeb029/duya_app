@@ -20,67 +20,99 @@ class PrayerTimesView extends StatelessWidget {
     final repo = context.watch<PrayerRitualRepository>();
     final schedule = repo.getSchedule();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isArabic ? 'مواقيت الصلاة' : 'Prayer Times'),
-        actions: [
-          IconButton(
-            tooltip: 'Qibla Compass',
-            onPressed: () => context.push('/qibla'),
-            icon: const Icon(Icons.explore_outlined),
-          ),
-        ],
-      ),
+    return DuyaSubpageScaffold(
+      title: isArabic ? 'مواقيت الصلاة' : 'Prayer Times',
+      actions: [
+        DuyaCircleActionButton(
+          icon: Icons.explore_outlined,
+          tooltip: 'Qibla Compass',
+          onTap: () => context.push('/qibla'),
+        ),
+      ],
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              gradient: DuyaColors.celestialHeroGradient,
-              borderRadius: BorderRadius.circular(24),
-            ),
+          DuyaDaylightBannerCard(
+            imageAsset: 'assets/images/live_mosque_day.jpg',
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.location_on_outlined,
-                        color: DuyaColors.desertGold, size: 18),
-                    const SizedBox(width: 6),
-                    Text(
-                      '${schedule.location.localizedCity(isArabic)}, ${schedule.location.countryName}',
-                      style: const TextStyle(color: Colors.white70),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE7F3EE),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            color: DuyaColors.emerald,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${schedule.location.localizedCity(isArabic)}, ${schedule.location.countryName}',
+                            style: const TextStyle(
+                              color: Color(0xFF136048),
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const Spacer(),
-                    Text(
-                      schedule.hijriLabel,
-                      style: const TextStyle(
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
                         color: DuyaColors.desertGoldSoft,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        schedule.hijriLabel,
+                        style: const TextStyle(
+                          color: DuyaColors.emerald,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 Text(
                   'Next: ${schedule.nextPrayer.localizedTitle(isArabic)}',
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   DateFormat.jm().format(schedule.nextPrayer.time),
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 36,
+                    color: Color(0xFF10553F),
+                    fontSize: 28,
                     fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
+                Text(
                   'Pause and reset your heart in prayer.',
-                  style: TextStyle(color: Colors.white70, fontSize: 12.5),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
@@ -163,7 +195,7 @@ class PrayerTimesView extends StatelessWidget {
                             entry.localizedTitle(isArabic),
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
-                              fontSize: 16,
+                              fontSize: 13.5,
                             ),
                           ),
                           if (entry.isNext)
@@ -171,7 +203,7 @@ class PrayerTimesView extends StatelessWidget {
                               'Upcoming Prayer',
                               style: TextStyle(
                                 color: DuyaColors.emerald,
-                                fontSize: 12,
+                                fontSize: 10.5,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -182,7 +214,7 @@ class PrayerTimesView extends StatelessWidget {
                       DateFormat.jm().format(entry.time),
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                        fontSize: 13.5,
                       ),
                     ),
                     const SizedBox(width: 8),

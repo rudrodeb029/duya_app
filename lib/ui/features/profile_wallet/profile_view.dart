@@ -15,10 +15,10 @@ class ProfileView extends StatelessWidget {
     final auth = context.watch<AuthProfileRepository>();
     final profile = auth.profile;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile & Preferences')),
+    return DuyaSubpageScaffold(
+      title: 'Profile & Preferences',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           DuyaCard(
             child: Row(
@@ -30,7 +30,7 @@ class ProfileView extends StatelessWidget {
                     profile.fullName.characters.first.toUpperCase(),
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: 19,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -44,7 +44,7 @@ class ProfileView extends StatelessWidget {
                         profile.fullName,
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 17,
+                          fontSize: 15,
                         ),
                       ),
                       Text(

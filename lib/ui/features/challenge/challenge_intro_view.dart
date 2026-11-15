@@ -3,22 +3,24 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/theme/duya_colors.dart';
 import '../../core/widgets/duya_widgets.dart';
+import '../../core/widgets/islamic_patterns.dart';
 
-/// Challenge Intro screen explaining daily keys, referrals & draw entry rules.
+/// Challenge Intro screen explaining daily Ilm, referrals & draw entry rules.
 class ChallengeIntroView extends StatelessWidget {
   const ChallengeIntroView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Umrah Knowledge Challenge')),
+    return DuyaSubpageScaffold(
+      title: 'Umrah Knowledge Challenge',
       body: SafeArea(
+        top: false,
         child: LayoutBuilder(
           builder: (context, constraints) => SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: (constraints.maxHeight - 48).clamp(
+                minHeight: (constraints.maxHeight - 28).clamp(
                   0.0,
                   double.infinity,
                 ),
@@ -26,48 +28,81 @@ class ChallengeIntroView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(height: 8),
                   Column(
                     children: [
-                      Container(
-                        width: 84,
-                        height: 84,
-                        decoration: const BoxDecoration(
-                          color: DuyaColors.desertGoldSoft,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.vpn_key_rounded,
-                          size: 44,
-                          color: DuyaColors.desertGold,
+                      DuyaDaylightBannerCard(
+                        imageAsset: 'assets/images/challenge_kaaba_day.jpg',
+                        padding: const EdgeInsets.all(18),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: DuyaColors.desertGoldSoft,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Text(
+                                      'Daily Draw Entry',
+                                      style: TextStyle(
+                                        color: DuyaColors.emerald,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const Text(
+                                    'Every Ilm = a door to knowledge & draw entry',
+                                    style: TextStyle(
+                                      color: Color(0xFF10553F),
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.w800,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 80),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        'Every key = a chance to enter',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
                       const _RuleRow(
-                        icon: Icons.vpn_key_outlined,
-                        title: 'A key for every day',
+                        leading: IlmIcon(
+                          size: 22,
+                          color: DuyaColors.desertGold,
+                        ),
+                        title: 'Daily Ilm gift',
                         desc:
-                            'You receive one complimentary key at the start of each day.',
+                            'You receive 2 complimentary Ilm at the start of each day to unlock doors.',
                       ),
                       const SizedBox(height: 12),
                       const _RuleRow(
-                        icon: Icons.share_outlined,
-                        title: 'Share & collect keys',
+                        leading: Icon(
+                          Icons.share_outlined,
+                          color: DuyaColors.emerald,
+                        ),
+                        title: 'Share & earn Ilm',
                         desc:
-                            'Invite family and friends — each friend who joins earns you another key.',
+                            'Invite family and friends — each friend who joins rewards you +3 Ilm.',
                       ),
                       const SizedBox(height: 12),
                       const _RuleRow(
-                        icon: Icons.check_circle_outline,
-                        title: 'Answer correctly & enter',
+                        leading: Icon(
+                          Icons.check_circle_outline,
+                          color: DuyaColors.emerald,
+                        ),
+                        title: 'Answer correctly & earn rewards',
                         desc:
-                            'Unlock a door and answer accurately to enter today’s Umrah & Zamzam draw.',
+                            'Spend 1 Ilm to unlock a door. Earn +2 Ilm & a draw entry when right, or +1 Ilm for learning.',
                       ),
                     ],
                   ),
@@ -118,12 +153,12 @@ class ChallengeIntroView extends StatelessWidget {
 
 class _RuleRow extends StatelessWidget {
   const _RuleRow({
-    required this.icon,
+    required this.leading,
     required this.title,
     required this.desc,
   });
 
-  final IconData icon;
+  final Widget leading;
   final String title;
   final String desc;
 
@@ -134,7 +169,7 @@ class _RuleRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: DuyaColors.emerald),
+          SizedBox(width: 24, height: 24, child: Center(child: leading)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -144,7 +179,7 @@ class _RuleRow extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 15,
+                    fontSize: 13.5,
                   ),
                 ),
                 const SizedBox(height: 2),

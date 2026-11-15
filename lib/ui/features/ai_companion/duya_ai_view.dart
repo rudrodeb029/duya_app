@@ -34,16 +34,9 @@ class _DuyaAiViewState extends State<DuyaAiView> {
   Widget build(BuildContext context) {
     final repo = context.watch<AiRepository>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Row(
-          children: [
-            Icon(Icons.auto_awesome, color: DuyaColors.desertGold, size: 20),
-            SizedBox(width: 8),
-            Text('Duya AI Companion'),
-          ],
-        ),
-      ),
+    return DuyaSubpageScaffold(
+      title: 'Duya AI Companion',
+      subtitle: 'Ask about Umrah, Duas & daily worship',
       body: Column(
         children: [
           SizedBox(
@@ -56,7 +49,8 @@ class _DuyaAiViewState extends State<DuyaAiView> {
               itemBuilder: (context, i) {
                 final prompt = AiRepository.quickPrompts[i];
                 return ActionChip(
-                  label: Text(prompt, style: const TextStyle(fontSize: 12)),
+                  backgroundColor: Colors.white,
+                  label: Text(prompt, style: const TextStyle(fontSize: 10.5)),
                   onPressed: () => _send(prompt),
                 );
               },
@@ -105,7 +99,7 @@ class _DuyaAiViewState extends State<DuyaAiView> {
                                       ),
                                       child: Text(
                                         '${link.label} →',
-                                        style: const TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 10.5),
                                       ),
                                     ),
                                   )

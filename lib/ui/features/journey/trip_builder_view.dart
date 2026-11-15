@@ -39,10 +39,11 @@ class _TripBuilderViewState extends State<TripBuilderView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('AI Trip Planner')),
+    return DuyaSubpageScaffold(
+      title: 'AI Trip Planner',
+      subtitle: 'Custom Makkah & Madinah itinerary',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           DuyaCard(
             child: Column(
@@ -122,7 +123,7 @@ class _TripBuilderViewState extends State<TripBuilderView> {
                               style: const TextStyle(
                                 color: DuyaColors.emerald,
                                 fontWeight: FontWeight.w700,
-                                fontSize: 12,
+                                fontSize: 10.5,
                               ),
                             ),
                           ),
@@ -133,7 +134,7 @@ class _TripBuilderViewState extends State<TripBuilderView> {
                         day.focusTitle,
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       const SizedBox(height: 6),

@@ -67,8 +67,8 @@ class _AllServicesViewState extends State<AllServicesView> {
     ),
     (
       title: 'Daily Knowledge Challenge',
-      subtitle: 'Open 4 doors & enter Umrah draws',
-      icon: Icons.vpn_key_outlined,
+      subtitle: 'Spend Ilm to open 8 doors & earn rewards',
+      icon: Icons.auto_awesome_outlined,
       route: '/challenge/intro',
       category: 'Community & Learning',
     ),
@@ -111,14 +111,14 @@ class _AllServicesViewState extends State<AllServicesView> {
           s.category.toLowerCase().contains(q);
     }).toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('All Duya Services')),
+    return DuyaSubpageScaffold(
+      title: 'All Duya Services',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           TextField(
             decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.search, color: DuyaColors.emerald),
               hintText: 'Search permits, worship, travel...',
             ),
             onChanged: (v) => setState(() => _query = v),
@@ -135,8 +135,8 @@ class _AllServicesViewState extends State<AllServicesView> {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: DuyaColors.desertGoldSoft,
-                        borderRadius: BorderRadius.circular(14),
+                        color: const Color(0xFFE7F3EE),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(s.icon, color: DuyaColors.emerald),
                     ),
@@ -149,7 +149,7 @@ class _AllServicesViewState extends State<AllServicesView> {
                             s.title,
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
-                              fontSize: 15,
+                              fontSize: 13.5,
                             ),
                           ),
                           Text(

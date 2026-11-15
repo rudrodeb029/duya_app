@@ -24,10 +24,10 @@ class _FlightsViewState extends State<FlightsView> {
         ? repo.flights
         : repo.flights.where((f) => f.cabinClass == _cabinFilter).toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Flights to Makkah & Madinah')),
+    return DuyaSubpageScaffold(
+      title: 'Flights to Makkah & Madinah',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           Wrap(
             spacing: 8,
@@ -65,7 +65,7 @@ class _FlightsViewState extends State<FlightsView> {
                         Text(
                           '${f.fromCode} ${f.departureTime}',
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -78,7 +78,7 @@ class _FlightsViewState extends State<FlightsView> {
                         Text(
                           '${f.toCode} ${f.arrivalTime}',
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -94,7 +94,7 @@ class _FlightsViewState extends State<FlightsView> {
                           style: const TextStyle(
                             color: DuyaColors.emerald,
                             fontWeight: FontWeight.w800,
-                            fontSize: 18,
+                            fontSize: 15.5,
                           ),
                         ),
                         const Spacer(),

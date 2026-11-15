@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 
 import '../../../data/repositories/challenge_repository.dart';
 import '../../core/theme/duya_colors.dart';
+import '../../core/widgets/duya_widgets.dart';
+import '../../core/widgets/islamic_patterns.dart';
 
-/// Persistent header + 5-item bottom bar (`Play`, `Winners`, `Keys`, `Share`, `Help`)
+/// Persistent daylight header + 5-item bottom bar (`Play`, `Winners`, `Ilm`, `Share`, `Help`)
 /// for the Knowledge Challenge experience.
 class ChallengeScaffold extends StatelessWidget {
   const ChallengeScaffold({
@@ -19,82 +21,90 @@ class ChallengeScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final keysCount = context.watch<ChallengeRepository>().keysCount;
+    final ilmBalance = context.watch<ChallengeRepository>().ilmBalance;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
-        ),
-        title: const Text('Knowledge Challenge'),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            decoration: BoxDecoration(
-              color: DuyaColors.desertGoldSoft,
-              borderRadius: BorderRadius.circular(20),
+      backgroundColor: Colors.transparent,
+      body: DuyaDaylightBackground(
+        child: Column(
+          children: [
+            DuyaDaylightHeader(
+              title: 'Knowledge Challenge',
+              showBack: true,
+              onBack: () => context.go('/home'),
+              actions: [
+                DuyaIlmChip(
+                  count: ilmBalance,
+                  onTap: () => context.go('/challenge/ilm'),
+                ),
+              ],
             ),
+            Expanded(child: body),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: isDark ? DuyaColors.nightSurface : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x140E523C),
+              blurRadius: 18,
+              offset: Offset(0, -4),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child: Row(
               children: [
-                const Icon(
-                  Icons.vpn_key_outlined,
-                  size: 16,
-                  color: DuyaColors.emerald,
+                _ChallengeNavItem.icon(
+                  label: 'Play',
+                  icon: Icons.door_front_door_outlined,
+                  activeIcon: Icons.door_front_door,
+                  selected: currentIndex == 0,
+                  onTap: () => context.go('/challenge/play'),
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  '$keysCount',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    color: DuyaColors.emerald,
+                _ChallengeNavItem.icon(
+                  label: 'Winners',
+                  icon: Icons.emoji_events_outlined,
+                  activeIcon: Icons.emoji_events,
+                  selected: currentIndex == 1,
+                  onTap: () => context.go('/challenge/winners'),
+                ),
+                _ChallengeNavItem(
+                  label: 'Ilm',
+                  selected: currentIndex == 2,
+                  onTap: () => context.go('/challenge/ilm'),
+                  iconBuilder: (selected) => IlmIcon(
+                    size: 22,
+                    color: selected
+                        ? const Color(0xFFC79A3C)
+                        : const Color(0xFF7A8C85),
                   ),
+                ),
+                _ChallengeNavItem.icon(
+                  label: 'Share',
+                  icon: Icons.share_outlined,
+                  activeIcon: Icons.share,
+                  selected: currentIndex == 3,
+                  onTap: () => _showShareSheet(context),
+                ),
+                _ChallengeNavItem.icon(
+                  label: 'Help',
+                  icon: Icons.support_agent_outlined,
+                  activeIcon: Icons.support_agent,
+                  selected: currentIndex == 4,
+                  onTap: () => context.go('/challenge/help'),
                 ),
               ],
             ),
           ),
-        ],
-      ),
-      body: body,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
-        onDestinationSelected: (idx) {
-          switch (idx) {
-            case 0:
-              context.go('/challenge/play');
-            case 1:
-              context.go('/challenge/winners');
-            case 2:
-              context.go('/challenge/keys');
-            case 3:
-              _showShareSheet(context);
-            case 4:
-              context.go('/challenge/help');
-          }
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.door_front_door_outlined),
-            label: 'Play',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.emoji_events_outlined),
-            label: 'Winners',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.vpn_key_outlined),
-            label: 'Keys',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.share_outlined),
-            label: 'Share',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.support_agent_outlined),
-            label: 'Help',
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -116,7 +126,7 @@ class ChallengeScaffold extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Share code DUYA2026 with friends & family. Every friend who enters earns you +1 Key!',
+              'Share code DUYA2026 with friends & family. Every friend who enters earns you +${ChallengeRepository.ilmReferralReward} Ilm!',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -129,9 +139,9 @@ class ChallengeScaffold extends StatelessWidget {
               child: const Text(
                 'DUYA2026',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 17,
                   fontWeight: FontWeight.w800,
-                  letterSpacing: 2,
+                  letterSpacing: 1.8,
                   color: DuyaColors.emerald,
                 ),
               ),
@@ -150,6 +160,80 @@ class ChallengeScaffold extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ChallengeNavItem extends StatelessWidget {
+  const _ChallengeNavItem({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    required this.iconBuilder,
+  });
+
+  factory _ChallengeNavItem.icon({
+    required String label,
+    required IconData icon,
+    required IconData activeIcon,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    return _ChallengeNavItem(
+      label: label,
+      selected: selected,
+      onTap: onTap,
+      iconBuilder: (isSelected) => Builder(
+        builder: (context) => Icon(
+          isSelected ? activeIcon : icon,
+          size: 24,
+          color: isSelected
+              ? DuyaColors.emerald
+              : Theme.of(context).textTheme.bodyMedium?.color,
+        ),
+      ),
+    );
+  }
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final Widget Function(bool selected) iconBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Semantics(
+        label: label,
+        button: true,
+        selected: selected,
+        child: Tooltip(
+          message: label,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(14),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  iconBuilder(selected),
+                  const SizedBox(height: 5),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    height: 2.5,
+                    width: selected ? 24 : 0,
+                    decoration: BoxDecoration(
+                      color: DuyaColors.emerald,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

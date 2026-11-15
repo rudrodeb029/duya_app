@@ -24,10 +24,10 @@ class _ArticlesLibraryViewState extends State<ArticlesLibraryView> {
         ? repo.ritualArticles
         : repo.ritualArticles.where((a) => a.topic == _topic).toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Rituals, Hajj & Manasik')),
+    return DuyaSubpageScaffold(
+      title: 'Rituals, Hajj & Manasik',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           Wrap(
             spacing: 8,
@@ -54,7 +54,7 @@ class _ArticlesLibraryViewState extends State<ArticlesLibraryView> {
                       art.topic.toUpperCase(),
                       style: const TextStyle(
                         color: DuyaColors.desertGold,
-                        fontSize: 11,
+                        fontSize: 9.5,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -63,7 +63,7 @@ class _ArticlesLibraryViewState extends State<ArticlesLibraryView> {
                       art.titleEn,
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -96,34 +96,49 @@ class ArticleDetailView extends StatelessWidget {
       orElse: () => repo.ritualArticles.first,
     );
 
-    return Scaffold(
-      appBar: AppBar(title: Text(art.topic)),
+    return DuyaSubpageScaffold(
+      title: art.topic,
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
-          Container(
+          DuyaDaylightBannerCard(
+            imageAsset: 'assets/images/hero_mosque_header.jpg',
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: DuyaColors.emeraldGoldGradient,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  art.titleEn,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 230),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    art.titleEn,
+                    style: const TextStyle(
+                      color: Color(0xFF10553F),
+                      fontSize: 17.5,
+                      fontWeight: FontWeight.w800,
+                      height: 1.2,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${art.speakerOrAuthor} • ${art.durationOrReadTime}',
-                  style: const TextStyle(color: DuyaColors.desertGoldSoft),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE7F3EE),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${art.speakerOrAuthor} • ${art.durationOrReadTime}',
+                      style: const TextStyle(
+                        color: DuyaColors.emerald,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 18),

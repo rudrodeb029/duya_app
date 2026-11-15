@@ -31,10 +31,10 @@ class _DuaDetailViewState extends State<DuaDetailView> {
     );
     final duas = repo.getDuasForCategory(category.id);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(category.localizedTitle(auth.isArabic))),
+    return DuyaSubpageScaffold(
+      title: category.localizedTitle(auth.isArabic),
       body: ListView.separated(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         itemCount: duas.length,
         separatorBuilder: (_, _) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
@@ -54,7 +54,7 @@ class _DuaDetailViewState extends State<DuaDetailView> {
                         dua.localizedTitle(auth.isArabic),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -72,7 +72,7 @@ class _DuaDetailViewState extends State<DuaDetailView> {
                   dua.arabicText,
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.rtl,
-                  style: DuyaTypography.arabicScript(fontSize: 23),
+                  style: DuyaTypography.arabicScript(fontSize: 20),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -93,7 +93,7 @@ class _DuaDetailViewState extends State<DuaDetailView> {
                     Text(
                       dua.reference,
                       style: const TextStyle(
-                        fontSize: 11.5,
+                        fontSize: 10,
                         color: DuyaColors.emerald,
                         fontWeight: FontWeight.w600,
                       ),

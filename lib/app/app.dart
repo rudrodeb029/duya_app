@@ -20,10 +20,12 @@ class DuyaApp extends StatefulWidget {
   const DuyaApp({
     super.key,
     required this.authRepository,
+    this.challengeRepository,
     this.initialLocation = '/splash',
   });
 
   final AuthProfileRepository authRepository;
+  final ChallengeRepository? challengeRepository;
   final String initialLocation;
 
   static Future<DuyaApp> bootstrap({String initialLocation = '/splash'}) async {
@@ -31,8 +33,11 @@ class DuyaApp extends StatefulWidget {
     await prefs.init();
     final authRepo = AuthProfileRepository(prefs: prefs);
     await authRepo.load();
+    final challengeRepo = ChallengeRepository();
+    await challengeRepo.loadExpandedQuestions();
     return DuyaApp(
       authRepository: authRepo,
+      challengeRepository: challengeRepo,
       initialLocation: initialLocation,
     );
   }
@@ -72,9 +77,14 @@ class _DuyaAppState extends State<DuyaApp> {
         ChangeNotifierProvider<MarketWalletRepository>(
           create: (_) => MarketWalletRepository(),
         ),
-        ChangeNotifierProvider<ChallengeRepository>(
-          create: (_) => ChallengeRepository(),
-        ),
+        if (widget.challengeRepository != null)
+          ChangeNotifierProvider<ChallengeRepository>.value(
+            value: widget.challengeRepository!,
+          )
+        else
+          ChangeNotifierProvider<ChallengeRepository>(
+            create: (_) => ChallengeRepository()..loadExpandedQuestions(),
+          ),
         ChangeNotifierProvider<AiRepository>(
           create: (_) => AiRepository(),
         ),

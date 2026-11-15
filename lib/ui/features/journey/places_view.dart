@@ -23,10 +23,10 @@ class _PlacesViewState extends State<PlacesView> {
         ? repo.places
         : repo.places.where((p) => p.category == _category).toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Places & Heritage Dining')),
+    return DuyaSubpageScaffold(
+      title: 'Places & Heritage Dining',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           Wrap(
             spacing: 8,
@@ -59,14 +59,14 @@ class _PlacesViewState extends State<PlacesView> {
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                            color: Color(p.accentHex),
-                            borderRadius: BorderRadius.circular(14),
+                            color: const Color(0xFFE7F3EE),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(
                             p.category == 'Ziyarat'
                                 ? Icons.mosque
                                 : Icons.restaurant,
-                            color: Colors.white,
+                            color: DuyaColors.emerald,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -78,7 +78,7 @@ class _PlacesViewState extends State<PlacesView> {
                                 p.name,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               Text('${p.city} • ${p.distanceLabel}'),
@@ -104,7 +104,7 @@ class _PlacesViewState extends State<PlacesView> {
                         style: const TextStyle(
                           color: DuyaColors.emerald,
                           fontWeight: FontWeight.w600,
-                          fontSize: 12,
+                          fontSize: 10.5,
                         ),
                       ),
                     ),

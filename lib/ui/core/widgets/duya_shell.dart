@@ -189,15 +189,15 @@ class _AiCompanionPill extends StatelessWidget {
                 const Icon(
                   Icons.auto_awesome,
                   color: Colors.white,
-                  size: 16,
+                  size: 14,
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 5),
                 Text(
                   label,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11.5,
                   ),
                 ),
               ],

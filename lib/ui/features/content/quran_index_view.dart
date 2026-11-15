@@ -52,11 +52,21 @@ class _QuranIndexViewState extends State<QuranIndexView>
           s.number.toString() == q;
     }).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('The Holy Qur’an'),
-        bottom: TabBar(
+    return DuyaSubpageScaffold(
+      title: 'The Holy Qur’an',
+      headerBottom: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.9),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: DuyaColors.emerald.withValues(alpha: 0.08),
+          ),
+        ),
+        child: TabBar(
           controller: _tabController,
+          labelColor: DuyaColors.emerald,
+          indicatorColor: DuyaColors.emerald,
+          dividerColor: Colors.transparent,
           tabs: const [
             Tab(text: 'Surahs'),
             Tab(text: 'Reciters'),
@@ -69,11 +79,11 @@ class _QuranIndexViewState extends State<QuranIndexView>
         children: [
           // Surahs Tab
           ListView(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
             children: [
               TextField(
                 decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: Icon(Icons.search, color: DuyaColors.emerald),
                   hintText: 'Search surah by name or number...',
                 ),
                 onChanged: (v) => setState(() => _searchQuery = v),
@@ -93,8 +103,8 @@ class _QuranIndexViewState extends State<QuranIndexView>
                           height: 42,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: DuyaColors.desertGoldSoft,
-                            borderRadius: BorderRadius.circular(12),
+                            color: const Color(0xFFE7F3EE),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             '${surah.number}',
@@ -113,7 +123,7 @@ class _QuranIndexViewState extends State<QuranIndexView>
                                 surah.nameEnglish,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               Text(
@@ -126,7 +136,7 @@ class _QuranIndexViewState extends State<QuranIndexView>
                         Text(
                           surah.nameArabic,
                           style: DuyaTypography.arabicScript(
-                            fontSize: 22,
+                            fontSize: 19,
                             color: DuyaColors.emerald,
                           ),
                         ),
@@ -151,13 +161,16 @@ class _QuranIndexViewState extends State<QuranIndexView>
                   setState(() => _selectedReciterId = r.id);
                   _tabController.animateTo(0);
                 },
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 26,
-                      backgroundColor: Color(r.accentHex),
-                      child: const Icon(Icons.volume_up, color: Colors.white),
-                    ),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Color(0xFFE7F3EE),
+                          child: Icon(
+                            Icons.volume_up,
+                            color: DuyaColors.emerald,
+                          ),
+                        ),
                     const SizedBox(width: 14),
                     Expanded(
                       child: Column(
@@ -167,7 +180,7 @@ class _QuranIndexViewState extends State<QuranIndexView>
                             r.nameEn,
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
-                              fontSize: 15.5,
+                              fontSize: 13.5,
                             ),
                           ),
                           Text(r.style),
@@ -175,7 +188,7 @@ class _QuranIndexViewState extends State<QuranIndexView>
                             '${r.surahCount} Audios Available',
                             style: const TextStyle(
                               color: DuyaColors.emerald,
-                              fontSize: 12,
+                              fontSize: 10.5,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

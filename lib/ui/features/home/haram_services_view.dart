@@ -23,10 +23,10 @@ class _HaramServicesViewState extends State<HaramServicesView> {
   Widget build(BuildContext context) {
     final repo = context.watch<PrayerRitualRepository>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Haram Mobility & Zamzam')),
+    return DuyaSubpageScaffold(
+      title: 'Haram Mobility & Zamzam',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           DuyaCard(
             color: DuyaColors.desertGoldSoft,
@@ -46,7 +46,7 @@ class _HaramServicesViewState extends State<HaramServicesView> {
                         'Electric Golf Cart & Wheelchair',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 15.5,
+                          fontSize: 13.5,
                           color: DuyaColors.textPrimaryLight,
                         ),
                       ),
@@ -54,7 +54,7 @@ class _HaramServicesViewState extends State<HaramServicesView> {
                       Text(
                         'Reserve upper-mezzanine electric cart assistance for Tawaf and Sa‘i.',
                         style: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 11,
                           color: DuyaColors.textSecondaryLight,
                         ),
                       ),
@@ -150,7 +150,7 @@ class _HaramServicesViewState extends State<HaramServicesView> {
             const SizedBox(height: 20),
             const Text(
               'Scheduled Requests',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
             ),
             const SizedBox(height: 8),
             ...repo.haramRequests.map(

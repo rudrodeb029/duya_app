@@ -15,10 +15,10 @@ class BookingsView extends StatelessWidget {
     final journeyRepo = context.watch<JourneyRepository>();
     final permitRepo = context.watch<PrayerRitualRepository>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Bookings & Permits')),
+    return DuyaSubpageScaffold(
+      title: 'My Bookings & Permits',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           if (permitRepo.permitBookings.isNotEmpty) ...[
             Text(
@@ -84,7 +84,7 @@ class BookingsView extends StatelessWidget {
                       b.title,
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                     Text(b.subtitle),

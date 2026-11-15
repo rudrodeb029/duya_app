@@ -26,31 +26,59 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     final repo = context.watch<MarketWalletRepository>();
     final product = repo.getProductById(widget.productId);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product Details'),
-        actions: [
-          IconButton(
-            onPressed: () => context.push('/market/cart'),
-            icon: Badge.count(
-              count: repo.cartCount,
-              isLabelVisible: repo.cartCount > 0,
-              child: const Icon(Icons.shopping_bag_outlined),
-            ),
-          ),
-        ],
-      ),
+    return DuyaSubpageScaffold(
+      title: 'Product Details',
+      actions: [
+        DuyaCircleActionButton(
+          icon: Icons.shopping_bag_outlined,
+          tooltip: 'Shopping Bag',
+          badgeCount: repo.cartCount,
+          onTap: () => context.push('/market/cart'),
+        ),
+      ],
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              color: Color(product.accentHex),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: const Center(
-              child: Icon(Icons.inventory_2, color: Colors.white, size: 72),
+          DuyaDaylightBannerCard(
+            imageAsset: product.id.contains('zamzam')
+                ? 'assets/images/promo_zamzam.jpg'
+                : 'assets/images/hero_mosque_header.jpg',
+            padding: const EdgeInsets.all(22),
+            child: SizedBox(
+              height: 130,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE7F3EE),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Text(
+                        'Verified Duya Essential',
+                        style: TextStyle(
+                          color: DuyaColors.emerald,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Icon(
+                      Icons.inventory_2_outlined,
+                      color: DuyaColors.emerald,
+                      size: 42,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 18),
@@ -66,7 +94,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 style: const TextStyle(
                   color: DuyaColors.emerald,
                   fontWeight: FontWeight.w800,
-                  fontSize: 22,
+                  fontSize: 18,
                 ),
               ),
               const Spacer(),
@@ -115,7 +143,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                   '$_qty',
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
                 IconButton(

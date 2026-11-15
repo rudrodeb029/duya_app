@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../data/repositories/auth_profile_repository.dart';
 import '../../core/theme/duya_colors.dart';
 import '../../core/widgets/duya_widgets.dart';
+import '../../core/widgets/islamic_patterns.dart';
 
 /// Entry splash screen that bootstraps user preferences and routes cleanly.
 class SplashView extends StatefulWidget {
@@ -44,35 +45,64 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: DuyaColors.celestialHeroGradient,
-        ),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const DuyaLogoBadge(size: 72, color: DuyaColors.desertGold),
-              const SizedBox(height: 18),
-              const Text(
-                'Duya',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 34,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.0,
+      backgroundColor: Colors.transparent,
+      body: DuyaDaylightBackground(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 360,
+              child: ShaderMask(
+                shaderCallback: (rect) => const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.0, 0.65, 1.0],
+                  colors: [Colors.black, Colors.black54, Colors.transparent],
+                ).createShader(rect),
+                blendMode: BlendMode.dstIn,
+                child: Image.asset(
+                  'assets/images/hero_mosque_header.jpg',
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                'Spiritual & Pilgrimage Companion',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.78),
-                  fontSize: 14,
-                ),
+            ),
+            const Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 88,
+                    height: 92,
+                    child: CustomPaint(painter: DuyaArchLogoPainter()),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Duya',
+                    style: TextStyle(
+                      color: Color(0xFF10553F),
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.4,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    'Spiritual & Pilgrimage Companion',
+                    style: TextStyle(
+                      color: DuyaColors.textSecondaryLight,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

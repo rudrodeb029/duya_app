@@ -21,32 +21,30 @@ class MotawefView extends StatelessWidget {
     final activeIdx = repo.activeMotawefStepIndex;
     final step = steps[activeIdx];
 
-    return Scaffold(
-      appBar: AppBar(title: Text(isArabic ? 'دليل المطوّف' : 'Motawef Guide')),
+    return DuyaSubpageScaffold(
+      title: isArabic ? 'دليل المطوّف' : 'Motawef Guide',
+      headerBottom: SizedBox(
+        height: 40,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: steps.length,
+          separatorBuilder: (_, _) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            final s = steps[index];
+            final selected = index == activeIdx;
+            return ChoiceChip(
+              label: Text('${s.stepNumber}. ${s.phase.name.toUpperCase()}'),
+              selected: selected,
+              onSelected: (_) => repo.setActiveMotawefStep(index),
+            );
+          },
+        ),
+      ),
       body: Column(
         children: [
-          // Horizontal step stepper
-          SizedBox(
-            height: 60,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              itemCount: steps.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                final s = steps[index];
-                final selected = index == activeIdx;
-                return ChoiceChip(
-                  label: Text('${s.stepNumber}. ${s.phase.name.toUpperCase()}'),
-                  selected: selected,
-                  onSelected: (_) => repo.setActiveMotawefStep(index),
-                );
-              },
-            ),
-          ),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -74,7 +72,7 @@ class MotawefView extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: DuyaColors.emerald,
-                            fontSize: 12.5,
+                            fontSize: 11,
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -83,7 +81,7 @@ class MotawefView extends StatelessWidget {
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.rtl,
                           style: DuyaTypography.arabicScript(
-                            fontSize: 22,
+                            fontSize: 20,
                             color: DuyaColors.celestialNight,
                           ),
                         ),
@@ -106,7 +104,7 @@ class MotawefView extends StatelessWidget {
                   const SizedBox(height: 18),
                   const Text(
                     'Checklist & Sunnah Reminders',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                   const SizedBox(height: 8),
                   ...step.checklist.map(
@@ -171,24 +169,32 @@ class _LapCounterCard extends StatelessWidget {
     final isTawaf = step.phase == MotawefPhase.tawaf;
     final count = isTawaf ? repo.tawafLap : repo.saiLap;
 
-    return Container(
+    return DuyaDaylightBannerCard(
+      imageAsset: 'assets/images/challenge_kaaba_day.jpg',
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: DuyaColors.celestialHeroGradient,
-        borderRadius: BorderRadius.circular(24),
-      ),
       child: Column(
         children: [
-          Text(
-            isTawaf ? 'Tawaf Circuit Tracker' : "Sa'i Lap Tracker",
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE7F3EE),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              isTawaf ? 'Tawaf Circuit Tracker' : "Sa'i Lap Tracker",
+              style: const TextStyle(
+                color: DuyaColors.emerald,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             '$count / 7',
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 40,
+              color: Color(0xFF10553F),
+              fontSize: 30,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -203,8 +209,8 @@ class _LapCounterCard extends StatelessWidget {
                 height: 8,
                 decoration: BoxDecoration(
                   color: done
-                      ? DuyaColors.desertGold
-                      : Colors.white.withValues(alpha: 0.25),
+                      ? DuyaColors.emerald
+                      : DuyaColors.emerald.withValues(alpha: 0.16),
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
@@ -216,10 +222,6 @@ class _LapCounterCard extends StatelessWidget {
             children: [
               OutlinedButton(
                 onPressed: isTawaf ? repo.resetTawafLap : repo.resetSaiLap,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.white38),
-                ),
                 child: const Text('Reset'),
               ),
               const SizedBox(width: 12),
@@ -227,10 +229,6 @@ class _LapCounterCard extends StatelessWidget {
                 onPressed: count >= 7
                     ? null
                     : (isTawaf ? repo.incrementTawafLap : repo.incrementSaiLap),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: DuyaColors.desertGold,
-                  foregroundColor: DuyaColors.celestialNight,
-                ),
                 icon: const Icon(Icons.add),
                 label: Text(count >= 7 ? 'Completed!' : 'Complete Lap'),
               ),

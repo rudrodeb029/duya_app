@@ -40,10 +40,10 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Create Account')),
+    return DuyaSubpageScaffold(
+      title: 'Create Account',
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         child: Form(
           key: _formKey,
           child: Column(
@@ -109,7 +109,7 @@ class _RegisterViewState extends State<RegisterView> {
                         children: [
                           const Text(
                             'Nationality',
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 10.5),
                           ),
                           Text(
                             _nationality,

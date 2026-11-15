@@ -44,7 +44,7 @@ class _ChallengeWinnersViewState extends State<ChallengeWinnersView> {
                     spotlight.displayName.characters.first,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -54,7 +54,7 @@ class _ChallengeWinnersViewState extends State<ChallengeWinnersView> {
                   spotlight.displayName,
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
-                    fontSize: 18,
+                    fontSize: 15.5,
                     color: DuyaColors.textPrimaryLight,
                   ),
                 ),
@@ -110,7 +110,7 @@ class _ChallengeWinnersViewState extends State<ChallengeWinnersView> {
                             children: [
                               const Icon(Icons.location_on_outlined, size: 14),
                               const SizedBox(width: 4),
-                              Text(w.country, style: const TextStyle(fontSize: 12)),
+                              Text(w.country, style: const TextStyle(fontSize: 10.5)),
                             ],
                           ),
                         ],

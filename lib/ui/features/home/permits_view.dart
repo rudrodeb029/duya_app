@@ -35,10 +35,10 @@ class _PermitsViewState extends State<PermitsView> {
       return true;
     }).toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Al-Rawdah & Umrah Permits')),
+    return DuyaSubpageScaffold(
+      title: 'Al-Rawdah & Umrah Permits',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           Wrap(
             spacing: 8,
@@ -64,7 +64,7 @@ class _PermitsViewState extends State<PermitsView> {
             const SizedBox(height: 18),
             const Text(
               'Your Active Permits',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
             ),
             const SizedBox(height: 8),
             ...repo.permitBookings.map(
@@ -88,13 +88,14 @@ class _PermitsViewState extends State<PermitsView> {
                               b.slot.titleEn,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
+                                fontSize: 13,
                                 color: DuyaColors.textPrimaryLight,
                               ),
                             ),
                             Text(
                               '${b.slot.dateLabel} • ${b.slot.timeWindow}',
                               style: const TextStyle(
-                                fontSize: 12.5,
+                                fontSize: 11,
                                 color: DuyaColors.textSecondaryLight,
                               ),
                             ),
@@ -103,7 +104,7 @@ class _PermitsViewState extends State<PermitsView> {
                               style: const TextStyle(
                                 color: DuyaColors.emerald,
                                 fontWeight: FontWeight.w700,
-                                fontSize: 12,
+                                fontSize: 10.5,
                               ),
                             ),
                           ],
@@ -118,7 +119,7 @@ class _PermitsViewState extends State<PermitsView> {
           const SizedBox(height: 18),
           const Text(
             'Available Prayer & Entry Windows',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
           ),
           const SizedBox(height: 10),
           ...slots.map(
@@ -135,14 +136,14 @@ class _PermitsViewState extends State<PermitsView> {
                             slot.titleEn,
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
-                              fontSize: 15.5,
+                              fontSize: 13.5,
                             ),
                           ),
                         ),
                         Chip(
                           label: Text(
                             slot.availabilityLabel,
-                            style: const TextStyle(fontSize: 11),
+                            style: const TextStyle(fontSize: 10),
                           ),
                         ),
                       ],

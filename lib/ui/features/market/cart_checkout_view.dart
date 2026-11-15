@@ -20,10 +20,10 @@ class _CartCheckoutViewState extends State<CartCheckoutView> {
   Widget build(BuildContext context) {
     final repo = context.watch<MarketWalletRepository>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Bag & Checkout')),
+    return DuyaSubpageScaffold(
+      title: 'Bag & Checkout',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
           if (repo.cart.isEmpty)
             const Padding(
@@ -105,7 +105,7 @@ class _CartCheckoutViewState extends State<CartCheckoutView> {
                         'Total',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 17,
+                          fontSize: 14.5,
                         ),
                       ),
                       const Spacer(),
@@ -113,7 +113,7 @@ class _CartCheckoutViewState extends State<CartCheckoutView> {
                         '${repo.cartTotalSar.toStringAsFixed(0)} SAR',
                         style: const TextStyle(
                           fontWeight: FontWeight.w800,
-                          fontSize: 20,
+                          fontSize: 17,
                           color: DuyaColors.emerald,
                         ),
                       ),

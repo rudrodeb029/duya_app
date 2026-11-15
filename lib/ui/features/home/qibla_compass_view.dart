@@ -28,10 +28,10 @@ class _QiblaCompassViewState extends State<QiblaCompassView> {
     final relativeAngleRad = ((qiblaDeg - _deviceHeadingDeg) * math.pi) / 180.0;
     final aligned = ((qiblaDeg - _deviceHeadingDeg).abs() % 360) < 8;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(isArabic ? 'اتجاه القبلة' : 'Qibla Compass')),
+    return DuyaSubpageScaffold(
+      title: isArabic ? 'اتجاه القبلة' : 'Qibla Compass',
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
         child: Column(
           children: [
             DuyaCard(
@@ -54,77 +54,120 @@ class _QiblaCompassViewState extends State<QiblaCompassView> {
                       ],
                     ),
                   ),
-                  Chip(
-                    label: Text('${qiblaDeg.toStringAsFixed(1)}° N'),
-                    backgroundColor: DuyaColors.desertGoldSoft,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: DuyaColors.desertGoldSoft,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${qiblaDeg.toStringAsFixed(1)}° N',
+                      style: const TextStyle(
+                        color: DuyaColors.emerald,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
             const Spacer(),
-            // Compass Dial
+            // Sunlit Daylight Compass Dial
             Container(
-              width: 260,
-              height: 260,
+              width: 248,
+              height: 248,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: DuyaColors.celestialHeroGradient,
+                color: Colors.white,
+                boxShadow: DuyaCard.lightShadow,
                 border: Border.all(
                   color: aligned ? DuyaColors.success : DuyaColors.desertGold,
                   width: 4,
                 ),
               ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Positioned(
-                    top: 16,
-                    child: Text(
-                      'N',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontWeight: FontWeight.bold,
+              child: Container(
+                margin: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFF3F7F5),
+                  border: Border.all(
+                    color: DuyaColors.emerald.withValues(alpha: 0.14),
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Positioned(
+                      top: 14,
+                      child: Text(
+                        'N',
+                        style: TextStyle(
+                          color: DuyaColors.emerald,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
-                  ),
-                  const Positioned(
-                    bottom: 16,
-                    child: Text('S', style: TextStyle(color: Colors.white54)),
-                  ),
-                  const Positioned(
-                    left: 18,
-                    child: Text('W', style: TextStyle(color: Colors.white54)),
-                  ),
-                  const Positioned(
-                    right: 18,
-                    child: Text('E', style: TextStyle(color: Colors.white54)),
-                  ),
-                  Transform.rotate(
-                    angle: relativeAngleRad,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.navigation,
-                          size: 62,
-                          color: aligned
-                              ? DuyaColors.success
-                              : DuyaColors.desertGold,
+                    const Positioned(
+                      bottom: 14,
+                      child: Text(
+                        'S',
+                        style: TextStyle(
+                          color: DuyaColors.textSecondaryLight,
+                          fontWeight: FontWeight.w600,
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'KAABA',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    const Positioned(
+                      left: 16,
+                      child: Text(
+                        'W',
+                        style: TextStyle(
+                          color: DuyaColors.textSecondaryLight,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const Positioned(
+                      right: 16,
+                      child: Text(
+                        'E',
+                        style: TextStyle(
+                          color: DuyaColors.textSecondaryLight,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Transform.rotate(
+                      angle: relativeAngleRad,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.navigation,
+                            size: 60,
+                            color: aligned
+                                ? DuyaColors.success
+                                : DuyaColors.emerald,
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'KAABA',
+                            style: TextStyle(
+                              color: Color(0xFF10553F),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 18),
@@ -140,7 +183,7 @@ class _QiblaCompassViewState extends State<QiblaCompassView> {
             const Spacer(),
             const Text(
               'Interactive Heading Simulation (for devices without magnetometer)',
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 10.5),
               textAlign: TextAlign.center,
             ),
             Slider(

@@ -102,13 +102,20 @@ class HomeView extends StatelessWidget {
                               s.appName,
                               style: const TextStyle(
                                 color: Color(0xFF10553F),
-                                fontSize: 28,
+                                fontSize: 23,
                                 height: 1.05,
                                 fontWeight: FontWeight.w800,
                                 letterSpacing: -0.4,
                               ),
                             ),
                             const Spacer(),
+                            DuyaCircleActionButton(
+                              icon: Icons.notifications_none_rounded,
+                              tooltip: 'Notifications',
+                              size: 42,
+                              onTap: () => _showNotificationsSheet(context),
+                            ),
+                            const SizedBox(width: 10),
                             Material(
                               color: Colors.white.withValues(alpha: 0.94),
                               shape: const CircleBorder(),
@@ -184,7 +191,7 @@ class HomeView extends StatelessWidget {
                                 onTap: () => context.push('/services'),
                                 iconWidget: const Icon(
                                   Icons.grid_view_rounded,
-                                  color: Color(0xFF14664D),
+                                  color: Color(0xFFC2902E),
                                   size: 30,
                                 ),
                               ),
@@ -287,7 +294,7 @@ class HomeView extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       color: Color(0xFF1B3A30),
-                                      fontSize: 18,
+                                      fontSize: 15.5,
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
@@ -296,7 +303,7 @@ class HomeView extends StatelessWidget {
                                     children: [
                                       const Icon(
                                         Icons.location_on,
-                                        size: 13,
+                                        size: 12,
                                         color: Color(0xFF186A50),
                                       ),
                                       const SizedBox(width: 3),
@@ -307,7 +314,7 @@ class HomeView extends StatelessWidget {
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             color: Color(0xFF4F6960),
-                                            fontSize: 12.5,
+                                            fontSize: 11,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -349,7 +356,7 @@ class HomeView extends StatelessWidget {
                                   children: [
                                     Icon(
                                       Icons.location_on,
-                                      size: 14,
+                                      size: 13,
                                       color: Color(0xFF14634C),
                                     ),
                                     SizedBox(width: 4),
@@ -357,14 +364,14 @@ class HomeView extends StatelessWidget {
                                       'Location',
                                       style: TextStyle(
                                         color: Color(0xFF14634C),
-                                        fontSize: 12,
+                                        fontSize: 10.5,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     SizedBox(width: 2),
                                     Icon(
                                       Icons.chevron_right,
-                                      size: 15,
+                                      size: 14,
                                       color: Color(0xFF14634C),
                                     ),
                                   ],
@@ -493,7 +500,7 @@ class HomeView extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Color(0xFF1A382E),
-                                fontSize: 18,
+                                fontSize: 15.5,
                                 height: 1.2,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -505,7 +512,7 @@ class HomeView extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Color(0xFF536A61),
-                                fontSize: 11.5,
+                                fontSize: 10.5,
                                 height: 1.35,
                               ),
                             ),
@@ -553,7 +560,7 @@ class HomeView extends StatelessWidget {
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700,
-                                            fontSize: 13,
+                                            fontSize: 11.5,
                                           ),
                                         ),
                                       ],
@@ -653,7 +660,7 @@ class HomeView extends StatelessWidget {
                                       'LIVE',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 10.5,
+                                        fontSize: 9.5,
                                         fontWeight: FontWeight.w800,
                                         letterSpacing: 0.5,
                                       ),
@@ -668,7 +675,7 @@ class HomeView extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Color(0xFF1A382E),
-                                  fontSize: 19,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
@@ -679,7 +686,7 @@ class HomeView extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   color: Color(0xFF536A61),
-                                  fontSize: 12.5,
+                                  fontSize: 11,
                                 ),
                               ),
                               const Spacer(),
@@ -706,14 +713,14 @@ class HomeView extends StatelessWidget {
                                     Icon(
                                       Icons.play_circle_filled_rounded,
                                       color: Color(0xFF14634C),
-                                      size: 20,
+                                      size: 18,
                                     ),
-                                    SizedBox(width: 7),
+                                    SizedBox(width: 6),
                                     Text(
                                       'Watch Live',
                                       style: TextStyle(
                                         color: Color(0xFF1A382E),
-                                        fontSize: 12.5,
+                                        fontSize: 11,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
@@ -809,8 +816,8 @@ class _QuickServiceTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: Color(0xFF1F3C32),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -861,7 +868,7 @@ class _StripActionItem extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Color(0xFF28433A),
-                  fontSize: 11,
+                  fontSize: 9.5,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -950,12 +957,12 @@ class _PromoHighlightCard extends StatelessWidget {
                             tag,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 12,
+                              fontSize: 10.5,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           const Spacer(),
-                          Icon(icon, color: Colors.white, size: 19),
+                          Icon(icon, color: Colors.white, size: 17),
                         ],
                       ),
                       const Spacer(),
@@ -965,7 +972,7 @@ class _PromoHighlightCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 15,
+                          fontSize: 12.5,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -979,4 +986,99 @@ class _PromoHighlightCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _showNotificationsSheet(BuildContext context) {
+  const items = [
+    (
+      icon: Icons.access_time_rounded,
+      title: 'Dhuhr Prayer Reminder',
+      subtitle: 'Adhan alert enabled for Makkah schedule',
+      route: '/prayer-times',
+    ),
+    (
+      icon: Icons.mosque_outlined,
+      title: 'Al-Rawdah Windows Open',
+      subtitle: 'New entry slots available this week',
+      route: '/permits?type=rawdah',
+    ),
+    (
+      icon: Icons.campaign_outlined,
+      title: 'Friday Sermon Live Now',
+      subtitle: 'Watch Al-Masjid Al-Haram broadcast',
+      route: '/content/live/live_makkah',
+    ),
+  ];
+
+  return showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (ctx) => Padding(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Notifications',
+            style: Theme.of(ctx).textTheme.headlineSmall,
+          ),
+          const SizedBox(height: 12),
+          ...items.map(
+            (n) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: DuyaCard(
+                padding: const EdgeInsets.all(12),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  context.push(n.route);
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE7F3EE),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        n.icon,
+                        color: const Color(0xFF14634C),
+                        size: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            n.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            n.subtitle,
+                            style: Theme.of(ctx).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right, size: 18),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

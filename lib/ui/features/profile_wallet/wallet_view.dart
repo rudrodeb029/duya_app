@@ -15,41 +15,54 @@ class WalletView extends StatelessWidget {
     final repo = context.watch<MarketWalletRepository>();
     final formatted = NumberFormat('#,##0.00').format(repo.convertedBalance);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Duya Wallet')),
+    return DuyaSubpageScaffold(
+      title: 'Duya Wallet',
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: DuyaColors.celestialHeroGradient,
-              borderRadius: BorderRadius.circular(26),
-            ),
+          DuyaDaylightBannerCard(
+            imageAsset: 'assets/images/hero_mosque_header.jpg',
+            padding: const EdgeInsets.all(22),
             child: Column(
               children: [
-                const Text(
-                  'Current Balance',
-                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE7F3EE),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'Current Balance',
+                    style: TextStyle(
+                      color: DuyaColors.emerald,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 10.5,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Text(
                   formatted,
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 36,
+                    color: Color(0xFF10553F),
+                    fontSize: 28,
                     fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   repo.displayCurrency,
                   style: const TextStyle(
-                    color: DuyaColors.desertGoldSoft,
-                    fontWeight: FontWeight.w700,
+                    color: DuyaColors.desertGold,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12,
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
                 Wrap(
                   spacing: 8,
                   children: MarketWalletRepository.currencyRates.keys.map((cur) {
@@ -61,20 +74,11 @@ class WalletView extends StatelessWidget {
                     );
                   }).toList(),
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () => repo.topUpWallet(500),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: DuyaColors.desertGold,
-                        foregroundColor: DuyaColors.celestialNight,
-                      ),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Top Up +500 SAR'),
-                    ),
-                  ],
+                const SizedBox(height: 14),
+                ElevatedButton.icon(
+                  onPressed: () => repo.topUpWallet(500),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Top Up +500 SAR'),
                 ),
               ],
             ),

@@ -6,6 +6,7 @@ import '../../../data/repositories/auth_profile_repository.dart';
 import '../../core/localization/app_strings.dart';
 import '../../core/theme/duya_colors.dart';
 import '../../core/theme/duya_typography.dart';
+import '../../core/widgets/duya_widgets.dart';
 import '../../core/widgets/islamic_patterns.dart';
 
 /// 5-slide editorial-Islamic onboarding flow maintaining all core concepts
@@ -87,8 +88,10 @@ class _OnboardingViewState extends State<OnboardingView> {
     ];
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
+      backgroundColor: Colors.transparent,
+      body: DuyaDaylightBackground(
+        child: SafeArea(
+          child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -237,6 +240,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             ),
           ],
         ),
+        ),
       ),
     );
   }
@@ -262,38 +266,40 @@ class _OrbitNamesPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 260,
-      height: 260,
-      decoration: const BoxDecoration(
+      width: 248,
+      height: 248,
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: DuyaColors.celestialHeroGradient,
+        color: Colors.white,
+        boxShadow: DuyaCard.lightShadow,
+        border: Border.all(
+          color: DuyaColors.emerald.withValues(alpha: 0.14),
+          width: 2,
+        ),
       ),
       child: Stack(
         alignment: Alignment.center,
         children: [
           CustomPaint(
-            size: const Size(240, 240),
+            size: const Size(228, 228),
             painter: ConcentricOrbitPainter(
-              color: DuyaColors.desertGold.withValues(alpha: 0.35),
+              color: DuyaColors.emerald.withValues(alpha: 0.22),
             ),
           ),
-          Transform.rotate(
-            angle: 0.785,
-            child: Container(
-              width: 68,
-              height: 68,
-              decoration: BoxDecoration(
-                color: DuyaColors.desertGold,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-            ),
+          const SizedBox(
+            width: 78,
+            height: 78,
+            child: CustomPaint(painter: DuyaArchLogoPainter()),
           ),
           const Positioned(
             bottom: 24,
             child: Text(
               'Makkah • Madinah • Global Ummah',
-              style: TextStyle(color: Colors.white70, fontSize: 11),
+              style: TextStyle(
+                color: DuyaColors.emerald,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
@@ -307,32 +313,45 @@ class _RawdahArchPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: MihrabArchClipper(),
-      child: Container(
-        width: 250,
-        height: 270,
-        decoration: const BoxDecoration(
-          gradient: DuyaColors.emeraldGoldGradient,
-        ),
-        padding: const EdgeInsets.all(24),
-        child: const Column(
+    return DuyaDaylightBannerCard(
+      imageAsset: 'assets/images/live_mosque_day.jpg',
+      padding: const EdgeInsets.all(22),
+      child: SizedBox(
+        width: 240,
+        height: 190,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.mosque, color: DuyaColors.desertGoldSoft, size: 52),
-            SizedBox(height: 12),
-            Text(
-              'Al-Rawdah Al-Sharifah',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE7F3EE),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.mosque,
+                color: DuyaColors.emerald,
+                size: 32,
               ),
             ),
-            SizedBox(height: 4),
-            Text(
+            const SizedBox(height: 12),
+            const Text(
+              'Al-Rawdah Al-Sharifah',
+              style: TextStyle(
+                color: Color(0xFF10553F),
+                fontWeight: FontWeight.w800,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
               'Slot Verified • QR Ready',
-              style: TextStyle(color: Colors.white70, fontSize: 12),
+              style: TextStyle(
+                color: DuyaColors.textSecondaryLight,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),
@@ -346,14 +365,8 @@ class _QuranPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return DuyaCard(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: DuyaColors.borderLight),
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -361,7 +374,7 @@ class _QuranPreviewCard extends StatelessWidget {
             'مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ',
             textAlign: TextAlign.center,
             style: DuyaTypography.arabicScript(
-              fontSize: 24,
+              fontSize: 20,
               color: DuyaColors.emerald,
             ),
           ),
@@ -369,14 +382,14 @@ class _QuranPreviewCard extends StatelessWidget {
           const Text(
             'Your Lord has not abandoned you, nor has He become hateful.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 11.5),
           ),
           const Divider(height: 24),
           Text(
             'وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ',
             textAlign: TextAlign.center,
             style: DuyaTypography.arabicScript(
-              fontSize: 24,
+              fontSize: 20,
               color: DuyaColors.celestialNight,
             ),
           ),
@@ -384,7 +397,7 @@ class _QuranPreviewCard extends StatelessWidget {
           const Text(
             'And surely your Lord will give so much to you that you will be pleased.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 11.5),
           ),
         ],
       ),
@@ -397,36 +410,54 @@ class _PrayerCardPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 260,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: DuyaColors.celestialHeroGradient,
-        borderRadius: BorderRadius.circular(28),
-      ),
-      child: const Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.explore, color: DuyaColors.desertGold, size: 42),
-          SizedBox(height: 12),
-          Text(
-            'Dhuhr',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
-          ),
-          Text(
-            '12 : 08',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 38,
-              fontWeight: FontWeight.w800,
+    return DuyaDaylightBannerCard(
+      imageAsset: 'assets/images/hero_mosque_header.jpg',
+      padding: const EdgeInsets.all(22),
+      child: SizedBox(
+        width: 240,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE7F3EE),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.explore,
+                color: DuyaColors.emerald,
+                size: 32,
+              ),
             ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'Makkah • Pause & reset in prayer',
-            style: TextStyle(color: DuyaColors.desertGoldSoft, fontSize: 12),
-          ),
-        ],
+            const SizedBox(height: 10),
+            const Text(
+              'Dhuhr',
+              style: TextStyle(
+                color: DuyaColors.textSecondaryLight,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const Text(
+              '12 : 08',
+              style: TextStyle(
+                color: Color(0xFF10553F),
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Makkah • Pause & reset in prayer',
+              style: TextStyle(
+                color: DuyaColors.emerald,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -437,23 +468,17 @@ class _WalletPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: DuyaColors.borderLight),
-      ),
-      child: const Column(
+    return const DuyaCard(
+      padding: EdgeInsets.all(20),
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Current Balance', style: TextStyle(fontSize: 12)),
+          Text('Current Balance', style: TextStyle(fontSize: 10.5)),
           SizedBox(height: 4),
           Text(
             '22,060 SAR',
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 23,
               fontWeight: FontWeight.w800,
               color: DuyaColors.emerald,
             ),

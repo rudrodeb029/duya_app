@@ -32,446 +32,377 @@ class _ContentHubViewState extends State<ContentHubView> {
             .where((a) => a.topic == _selectedTopic)
             .toList();
 
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: DuyaColors.emeraldGoldGradient,
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 14, 20, 22),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const DuyaLogoBadge(
-                          size: 30,
-                          color: DuyaColors.desertGoldSoft,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          isArabic ? 'مركز المحتوى' : 'Content Hub',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 21,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          onPressed: () => context.push('/profile'),
-                          icon: const Icon(
-                            Icons.person_outline,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _ContentHeaderTile(
-                          icon: Icons.access_time,
-                          label: s.prayerTimes,
-                          onTap: () => context.push('/prayer-times'),
-                        ),
-                        _ContentHeaderTile(
-                          icon: Icons.menu_book_rounded,
-                          label: s.quran,
-                          onTap: () => context.push('/content/quran'),
-                        ),
-                        _ContentHeaderTile(
-                          icon: Icons.volunteer_activism_outlined,
-                          label: s.duas,
-                          onTap: () => context.push('/content/duas'),
-                        ),
-                        _ContentHeaderTile(
-                          icon: Icons.explore_outlined,
-                          label: s.qibla,
-                          onTap: () => context.push('/qibla'),
-                        ),
-                      ],
-                    ),
-                  ],
+    return DuyaDaylightBackground(
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: DuyaDaylightHeader(
+              title: isArabic ? 'مركز المحتوى' : 'Content Hub',
+              showBack: false,
+              showLogo: true,
+              actions: [
+                DuyaCircleActionButton(
+                  icon: Icons.person,
+                  tooltip: 'Profile',
+                  onTap: () => context.push('/profile'),
                 ),
-              ),
-            ),
-          ),
-        ),
-        // Live Haramain Broadcasts
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-            child: DuyaSectionHeader(
-              title: isArabic ? 'البث المباشر للحرمين' : 'Live from Al-Haramain',
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 188,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: repo.liveChannels.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
-                final ch = repo.liveChannels[index];
-                return InkWell(
-                  onTap: () => context.push('/content/live/${ch.id}'),
-                  borderRadius: BorderRadius.circular(22),
-                  child: Container(
-                    width: 270,
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: Color(ch.accentHex),
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: DuyaColors.error.withValues(alpha: 0.85),
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Text(
-                                'Live •',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 11.5,
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            const Icon(
-                              Icons.podcasts,
-                              color: DuyaColors.desertGoldSoft,
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Text(
-                          ch.titleEn,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          ch.mosqueName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        // Explore by Topic
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 22, 20, 10),
-            child: Text(
-              'Explore by Topic',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                for (final topic in [
-                  'All',
-                  'Rituals',
-                  'Hajj',
-                  'Manasik',
-                  'Reflections',
-                ])
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(topic),
-                      selected: _selectedTopic == topic,
-                      onSelected: (_) => setState(() => _selectedTopic = topic),
-                    ),
-                  ),
               ],
-            ),
-          ),
-        ),
-        // Holy Qur'an Reciters Shelf
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 22, 20, 12),
-            child: DuyaSectionHeader(
-              title: 'Holy Qur’an',
-              onActionTap: () => context.push('/content/quran'),
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 205,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: repo.reciters.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
-                final reciter = repo.reciters[index];
-                return InkWell(
-                  onTap: () => context.push('/content/quran?reciter=${reciter.id}'),
-                  borderRadius: BorderRadius.circular(22),
-                  child: Container(
-                    width: 210,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Color(reciter.accentHex),
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor:
-                                  Colors.white.withValues(alpha: 0.2),
-                              child: const Icon(
-                                Icons.record_voice_over,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Spacer(),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0x38155E49),
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Icon(
-                                Icons.volume_up,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Text(
-                          reciter.titleEn,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          '${reciter.surahCount} Surahs • ${reciter.style}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        // Duas & Athkar Spotlight
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 22, 20, 8),
-          sliver: SliverToBoxAdapter(
-            child: DuyaCard(
-              onTap: () => context.push('/content/duas'),
-              color: DuyaColors.desertGoldSoft,
-              child: const Row(
+              bottom: Row(
                 children: [
-                  Icon(
-                    Icons.volunteer_activism_outlined,
-                    color: DuyaColors.emerald,
-                    size: 32,
+                  DuyaHeaderQuickTile(
+                    icon: Icons.access_time,
+                    label: s.prayerTimes,
+                    onTap: () => context.push('/prayer-times'),
                   ),
-                  SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Duas & Daily Athkar',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: DuyaColors.textPrimaryLight,
-                          ),
-                        ),
-                        Text(
-                          'Authentic supplications with built-in Tasbih counter',
-                          style: TextStyle(
-                            fontSize: 12.5,
-                            color: DuyaColors.textSecondaryLight,
-                          ),
-                        ),
-                      ],
-                    ),
+                  DuyaHeaderQuickTile(
+                    icon: Icons.menu_book_rounded,
+                    label: s.quran,
+                    onTap: () => context.push('/content/quran'),
                   ),
-                  Icon(Icons.arrow_forward, color: DuyaColors.emerald),
+                  DuyaHeaderQuickTile(
+                    icon: Icons.volunteer_activism_outlined,
+                    label: s.duas,
+                    onTap: () => context.push('/content/duas'),
+                  ),
+                  DuyaHeaderQuickTile(
+                    icon: Icons.explore_outlined,
+                    label: s.qibla,
+                    onTap: () => context.push('/qibla'),
+                  ),
                 ],
               ),
             ),
           ),
-        ),
-        // Rituals, Hajj Journey, Manasik & Reflections
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 10),
-            child: DuyaSectionHeader(
-              title: 'Rituals, Hajj & Reflections',
-              onActionTap: () => context.push('/content/articles'),
+          // Live Haramain Broadcasts
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+              child: DuyaSectionHeader(
+                title: isArabic ? 'البث المباشر للحرمين' : 'Live from Al-Haramain',
+              ),
             ),
           ),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-          sliver: SliverList.separated(
-            itemCount: filteredArticles.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              final art = filteredArticles[index];
-              return DuyaCard(
-                onTap: () => context.push('/content/articles/${art.id}'),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Icon(
-                        art.mediaKind == 'audio'
-                            ? Icons.headphones
-                            : art.mediaKind == 'video'
-                                ? Icons.play_circle_outline
-                                : Icons.article_outlined,
-                        color: DuyaColors.emerald,
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 176,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: repo.liveChannels.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  final ch = repo.liveChannels[index];
+                  return SizedBox(
+                    width: 280,
+                    child: DuyaDaylightBannerCard(
+                      imageAsset: 'assets/images/live_mosque_day.jpg',
+                      onTap: () => context.push('/content/live/${ch.id}'),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 9,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFD62B2B),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.circle, size: 7, color: Colors.white),
+                                SizedBox(width: 5),
+                                Text(
+                                  'LIVE',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 9.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 168),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  ch.titleEn,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Color(0xFF10553F),
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.2,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  ch.mosqueName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 14),
+                  );
+                },
+              ),
+            ),
+          ),
+          // Explore by Topic
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+              child: Text(
+                'Explore by Topic',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 44,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  for (final topic in [
+                    'All',
+                    'Rituals',
+                    'Hajj',
+                    'Manasik',
+                    'Reflections',
+                  ])
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: Text(topic),
+                        selected: _selectedTopic == topic,
+                        onSelected: (_) =>
+                            setState(() => _selectedTopic = topic),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          // Holy Qur'an Reciters Shelf
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+              child: DuyaSectionHeader(
+                title: 'Holy Qur’an',
+                onActionTap: () => context.push('/content/quran'),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 158,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: repo.reciters.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  final reciter = repo.reciters[index];
+                  return SizedBox(
+                    width: 210,
+                    child: DuyaCard(
+                      padding: const EdgeInsets.all(15),
+                      onTap: () =>
+                          context.push('/content/quran?reciter=${reciter.id}'),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Color(0xFFE7F3EE),
+                                child: Icon(
+                                  Icons.record_voice_over,
+                                  color: DuyaColors.emerald,
+                                  size: 18,
+                                ),
+                              ),
+                              const Spacer(),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 9,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: DuyaColors.desertGoldSoft,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Icon(
+                                  Icons.volume_up,
+                                  color: DuyaColors.emerald,
+                                  size: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          Text(
+                            reciter.titleEn,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${reciter.surahCount} Surahs • ${reciter.style}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontSize: 10.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          // Duas & Athkar Spotlight
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 8),
+            sliver: SliverToBoxAdapter(
+              child: DuyaCard(
+                onTap: () => context.push('/content/duas'),
+                color: DuyaColors.desertGoldSoft,
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.volunteer_activism_outlined,
+                      color: DuyaColors.emerald,
+                      size: 30,
+                    ),
+                    SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            art.topic.toUpperCase(),
-                            style: const TextStyle(
-                              color: DuyaColors.desertGold,
+                            'Duas & Daily Athkar',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13.5,
+                              color: DuyaColors.textPrimaryLight,
+                            ),
+                          ),
+                          Text(
+                            'Authentic supplications with built-in Tasbih counter',
+                            style: TextStyle(
                               fontSize: 11,
-                              fontWeight: FontWeight.w700,
+                              color: DuyaColors.textSecondaryLight,
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            art.titleEn,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '${art.speakerOrAuthor} • ${art.durationOrReadTime}',
-                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
                       ),
                     ),
-                    const Icon(Icons.chevron_right),
+                    Icon(Icons.arrow_forward, color: DuyaColors.emerald),
                   ],
                 ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ContentHeaderTile extends StatelessWidget {
-  const _ContentHeaderTile({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Column(
-        children: [
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(14),
+              ),
             ),
-            child: Icon(icon, color: Colors.white),
           ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 11.5,
-              fontWeight: FontWeight.w600,
+          // Rituals, Hajj Journey, Manasik & Reflections
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+              child: DuyaSectionHeader(
+                title: 'Rituals, Hajj & Reflections',
+                onActionTap: () => context.push('/content/articles'),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
+            sliver: SliverList.separated(
+              itemCount: filteredArticles.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final art = filteredArticles[index];
+                return DuyaCard(
+                  onTap: () => context.push('/content/articles/${art.id}'),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE7F3EE),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          art.mediaKind == 'audio'
+                              ? Icons.headphones
+                              : art.mediaKind == 'video'
+                                  ? Icons.play_circle_outline
+                                  : Icons.article_outlined,
+                          color: DuyaColors.emerald,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              art.topic.toUpperCase(),
+                              style: const TextStyle(
+                                color: DuyaColors.desertGold,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              art.titleEn,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              '${art.speakerOrAuthor} • ${art.durationOrReadTime}',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ],
