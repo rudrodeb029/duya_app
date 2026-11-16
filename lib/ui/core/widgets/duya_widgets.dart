@@ -298,10 +298,10 @@ class DuyaDaylightHeader extends StatelessWidget {
                               color: isDark
                                   ? DuyaColors.textPrimaryDark
                                   : const Color(0xFF10553F),
-                              fontSize: 15.5,
+                              fontSize: 13.0,
                               height: 1.15,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: -0.3,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.2,
                             ),
                           ),
                           if (subtitle != null) ...[
@@ -545,8 +545,14 @@ class DuyaSectionHeader extends StatelessWidget {
 class DuyaIlmChip extends StatelessWidget {
   const DuyaIlmChip({super.key, required this.count, this.onTap});
 
-  final int count;
+  final num count;
   final VoidCallback? onTap;
+
+  String get _formattedCount {
+    final d = count.toDouble();
+    if (d == d.roundToDouble()) return d.toInt().toString();
+    return double.parse(d.toStringAsFixed(3)).toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -565,7 +571,7 @@ class DuyaIlmChip extends StatelessWidget {
               const IlmIcon(size: 15, color: DuyaColors.desertGold),
               const SizedBox(width: 6),
               Text(
-                '$count Ilm',
+                '$_formattedCount Ilm',
                 style: TextStyle(
                   color: isDark
                       ? DuyaColors.textPrimaryDark

@@ -118,6 +118,41 @@ void main() {
             ChallengeRepository.ilmCorrectReward,
       );
 
+      // Answering the next question in the same door incorrectly decreases Ilm by 0.125.
+      final balanceAfterFirst = repo.ilmBalance;
+      final q2 = repo.getQuestionForDoor('quran');
+      final wrongIdx = (q2.correctIndex + 1) % q2.optionsEn.length;
+      final wrongResult = repo.submitAnswer(
+        question: q2,
+        selectedIndex: wrongIdx,
+      );
+      expect(wrongResult, isFalse);
+      expect(ChallengeRepository.ilmCorrectReward, 0.125);
+      expect(ChallengeRepository.ilmWrongPenalty, 0.125);
+      expect(
+        repo.ilmBalance,
+        balanceAfterFirst - ChallengeRepository.ilmWrongPenalty,
+      );
+      expect(repo.doorIlmToday('quran'), 0.0);
+
+      // Raffle spin requires at least 250 Ilm (minIlmForRaffleSpin).
+      expect(ChallengeRepository.minIlmForRaffleSpin, 250);
+      expect(repo.canSpinRaffle, isFalse);
+      final basePool = repo.eligibleRaffleParticipants(
+        currentUserName: 'Abdullah Al-Mansoor',
+        currentUserCountry: 'Saudi Arabia',
+      );
+      expect(basePool.length, 12);
+      expect(basePool.every((p) => p.ilmScore >= 250), isTrue);
+      expect(basePool.any((p) => p.isCurrentUser), isFalse);
+
+      repo.recordRaffleWinner(basePool[2]);
+      expect(repo.selectedRaffleWinner?.id, basePool[2].id);
+      expect(
+        repo.winners.first.displayName,
+        basePool[2].displayName.toUpperCase(),
+      );
+
       // Advancing to the next day serves a new question and unlocks the door again.
       now = now.add(const Duration(days: 1));
       final day2Question = repo.getQuestionForDoor('quran');

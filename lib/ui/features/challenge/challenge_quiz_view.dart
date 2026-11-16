@@ -237,8 +237,8 @@ class _ChallengeQuizViewState extends State<ChallengeQuizView> {
                 children: [
                   Text(
                     _isCorrect
-                        ? 'MashaAllah! +${ChallengeRepository.ilmCorrectReward} Ilm & +1 Draw Entry'
-                        : 'Good Try — +${ChallengeRepository.ilmLearningReward} Ilm for Learning',
+                        ? 'MashaAllah! +${ChallengeRepository.formatIlm(ChallengeRepository.ilmCorrectReward)} Ilm & +1 Draw Entry'
+                        : 'Incorrect — -${ChallengeRepository.formatIlm(ChallengeRepository.ilmWrongPenalty)} Ilm',
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 12,
@@ -269,7 +269,7 @@ class _ChallengeQuizViewState extends State<ChallengeQuizView> {
           else
             Text(
               answeredToday == 0
-                  ? 'Spending 1 Ilm unlocks today’s $dailyTotal questions — answer at least $minJoin questions to join!'
+                  ? 'Today’s $dailyTotal questions are open — answer at least $minJoin questions to join!'
                   : isJoined
                       ? 'You have met the $minJoin-question minimum! Keep answering up to $dailyTotal questions today.'
                       : 'Answer ${repo.remainingToJoin(door.id)} more question${repo.remainingToJoin(door.id) == 1 ? '' : 's'} to reach the minimum $minJoin questions to join.',
@@ -317,19 +317,6 @@ class _ChallengeQuizViewState extends State<ChallengeQuizView> {
               ),
             ),
           ),
-          if (_submitted && !isExhausted && isJoined) ...[
-            const SizedBox(height: 8),
-            Center(
-              child: TextButton.icon(
-                onPressed: () => context.go('/challenge/play'),
-                icon: const Icon(Icons.door_front_door_outlined, size: 16),
-                label: Text(
-                  'Back to Doors ($answeredToday/$dailyTotal answered)',
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-            ),
-          ],
         ],
       ),
     );

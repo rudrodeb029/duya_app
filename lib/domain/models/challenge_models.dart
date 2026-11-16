@@ -99,6 +99,24 @@ class ChallengeWinner {
   final String dateLabel;
 }
 
+class RaffleParticipant {
+  const RaffleParticipant({
+    required this.id,
+    required this.displayName,
+    required this.country,
+    required this.ilmScore,
+    required this.prizeTitle,
+    this.isCurrentUser = false,
+  });
+
+  final String id;
+  final String displayName;
+  final String country;
+  final double ilmScore;
+  final String prizeTitle;
+  final bool isCurrentUser;
+}
+
 class ChallengeFaq {
   const ChallengeFaq({required this.question, required this.answer});
 

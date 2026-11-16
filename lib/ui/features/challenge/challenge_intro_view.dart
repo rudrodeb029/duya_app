@@ -52,19 +52,19 @@ class ChallengeIntroView extends StatelessWidget {
                                       'Daily Draw Entry',
                                       style: TextStyle(
                                         color: DuyaColors.emerald,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 9,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 8),
                                   const Text(
                                     'Every Ilm = a door to knowledge & draw entry',
                                     style: TextStyle(
                                       color: Color(0xFF10553F),
-                                      fontSize: 16.5,
-                                      fontWeight: FontWeight.w800,
-                                      height: 1.2,
+                                      fontSize: 12.5,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.25,
                                     ),
                                   ),
                                 ],
@@ -102,7 +102,7 @@ class ChallengeIntroView extends StatelessWidget {
                         ),
                         title: 'Answer correctly & earn rewards',
                         desc:
-                            'Spend 1 Ilm to unlock a door. Earn +2 Ilm & a draw entry when right, or +1 Ilm for learning.',
+                            'All 8 doors are open daily. Earn +0.125 Ilm & a draw entry when right, or -0.125 Ilm when wrong.',
                       ),
                     ],
                   ),
@@ -110,6 +110,14 @@ class ChallengeIntroView extends StatelessWidget {
                     children: [
                       const SizedBox(height: 16),
                       TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 8,
+                          ),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
                         onPressed: () {
                           showDialog<void>(
                             context: context,
@@ -129,14 +137,31 @@ class ChallengeIntroView extends StatelessWidget {
                         },
                         child: const Text(
                           'By proceeding, you agree to Terms & Conditions',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(double.infinity, 40),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 16,
+                            ),
+                          ),
                           onPressed: () => context.go('/challenge/play'),
-                          child: const Text('Play Now'),
+                          child: const Text(
+                            'Play Now',
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -178,12 +203,17 @@ class _RuleRow extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13.5,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11.5,
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(desc, style: Theme.of(context).textTheme.bodyMedium),
+                Text(
+                  desc,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontSize: 10.5),
+                ),
               ],
             ),
           ),

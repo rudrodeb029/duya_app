@@ -14,10 +14,12 @@ class ChallengeScaffold extends StatelessWidget {
     super.key,
     required this.currentIndex,
     required this.body,
+    this.title,
   });
 
   final int currentIndex;
   final Widget body;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,8 @@ class ChallengeScaffold extends StatelessWidget {
         child: Column(
           children: [
             DuyaDaylightHeader(
-              title: 'Knowledge Challenge',
+              title: title ??
+                  (currentIndex == 1 ? 'Raffle Draw' : 'Knowledge Challenge'),
               showBack: true,
               onBack: () => context.go('/home'),
               actions: [

@@ -87,7 +87,7 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${repo.ilmBalance} Ilm',
+                            '${ChallengeRepository.formatIlm(repo.ilmBalance)} Ilm',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -122,7 +122,7 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                 Text(
                   toNext == null
                       ? 'Highest level reached — MashaAllah!'
-                      : '$toNext Ilm to reach ${levels[currentIdx + 1].title}',
+                      : '${ChallengeRepository.formatIlm(toNext)} Ilm to reach ${levels[currentIdx + 1].title}',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.85),
                     fontSize: 10.5,
@@ -137,7 +137,7 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
             children: [
               _StatTile(
                 label: 'Earned today',
-                value: '+${repo.ilmEarnedToday}',
+                value: '+${ChallengeRepository.formatIlm(repo.ilmEarnedToday)}',
               ),
               const SizedBox(width: 10),
               _StatTile(
@@ -167,9 +167,8 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                 _RuleTile(
                   icon: Icons.door_front_door_outlined,
                   title: 'Open a door',
-                  subtitle: 'Each door can be opened once per day.',
-                  amount: '−${ChallengeRepository.ilmPerDoor}',
-                  isCost: true,
+                  subtitle: 'All 8 doors are open to play every day.',
+                  amount: 'Free',
                 ),
                 _RuleTile(
                   icon: Icons.check_circle_outline,
@@ -178,10 +177,11 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                   amount: '+${ChallengeRepository.ilmCorrectReward}',
                 ),
                 _RuleTile(
-                  icon: Icons.menu_book_outlined,
-                  title: 'Learning reward',
-                  subtitle: 'Every attempt teaches — even a wrong answer.',
-                  amount: '+${ChallengeRepository.ilmLearningReward}',
+                  icon: Icons.cancel_outlined,
+                  title: 'Incorrect answer',
+                  subtitle: 'Wrong answers deduct Ilm from your balance.',
+                  amount: '−${ChallengeRepository.ilmWrongPenalty}',
+                  isCost: true,
                 ),
                 _RuleTile(
                   icon: Icons.share_outlined,

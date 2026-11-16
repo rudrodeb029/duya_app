@@ -25,10 +25,20 @@ class ChallengeRepository extends ChangeNotifier {
   }
 
   static const int dailyIlmGift = 2;
-  static const int ilmPerDoor = 1;
-  static const int ilmCorrectReward = 2;
-  static const int ilmLearningReward = 1;
+  static const int ilmPerDoor = 0;
+  static const double ilmCorrectReward = 0.125;
+  static const double ilmWrongPenalty = 0.125;
+  static const double ilmLearningReward = 0;
   static const int ilmReferralReward = 3;
+
+  /// Formats an Ilm amount cleanly (e.g. `2.0` -> `2`, `2.125` -> `2.125`).
+  static String formatIlm(num value) {
+    final d = value.toDouble();
+    if (d == d.roundToDouble()) {
+      return d.toInt().toString();
+    }
+    return double.parse(d.toStringAsFixed(3)).toString();
+  }
 
   /// Each door card serves 100 questions per day, rotating through 10 distinct
   /// 100-question sets across a 10-day cycle (1,000 questions per door total).
@@ -37,6 +47,9 @@ class ChallengeRepository extends ChangeNotifier {
 
   /// Minimum questions a user must answer in a door card to qualify/join.
   static const int minQuestionsToJoin = 10;
+
+  /// Minimum Ilm balance required for a user to spin/enter the Raffle Wheel.
+  static const int minIlmForRaffleSpin = 250;
 
   static final DateTime _rotationEpoch = DateTime.utc(2026, 1, 1);
 
@@ -56,20 +69,20 @@ class ChallengeRepository extends ChangeNotifier {
 
   int get _currentDayNumber => _dayNumberFor(_clock());
 
-  int _ilmBalance = dailyIlmGift;
-  int get ilmBalance {
+  double _ilmBalance = dailyIlmGift.toDouble();
+  double get ilmBalance {
     final daysElapsed = _currentDayNumber - _activeDayNumber;
     return daysElapsed > 0
         ? _ilmBalance + daysElapsed * dailyIlmGift
         : _ilmBalance;
   }
 
-  int _ilmEarnedToday = 0;
-  int get ilmEarnedToday =>
+  double _ilmEarnedToday = 0;
+  double get ilmEarnedToday =>
       _currentDayNumber == _activeDayNumber ? _ilmEarnedToday : 0;
 
-  int _lifetimeIlm = 0;
-  int get lifetimeIlm => _lifetimeIlm;
+  double _lifetimeIlm = 0;
+  double get lifetimeIlm => _lifetimeIlm;
 
   int _drawEntriesCount = 0;
   int get drawEntriesCount => _drawEntriesCount;
@@ -78,6 +91,7 @@ class ChallengeRepository extends ChangeNotifier {
   final Map<int, Set<String>> _completedDoorsByDay = {};
   final Map<int, Map<String, int>> _answeredCountByDay = {};
   final Map<int, Map<String, int>> _correctCountByDay = {};
+  final Map<int, Map<String, double>> _ilmByDoorAndDay = {};
 
   Set<String> _doorsForDay(int day) => _completedDoorsByDay[day] ?? const {};
 
@@ -94,6 +108,10 @@ class ChallengeRepository extends ChangeNotifier {
   /// Number of questions answered correctly today in [doorId].
   int correctCountToday(String doorId) =>
       _correctCountByDay[_currentDayNumber]?[doorId] ?? 0;
+
+  /// Net Ilm earned today in [doorId] (+0.125 per correct, -0.125 per wrong).
+  double doorIlmToday(String doorId) =>
+      _ilmByDoorAndDay[_currentDayNumber]?[doorId] ?? 0.0;
 
   /// How many more questions the user must answer in [doorId] today to reach
   /// the minimum [minQuestionsToJoin] (10) requirement.
@@ -139,17 +157,22 @@ class ChallengeRepository extends ChangeNotifier {
   }
 
   /// Ilm still required to reach the next level, or null at max level.
-  int? get ilmToNextLevel {
+  double? get ilmToNextLevel {
     for (final level in ilmLevels) {
       if (_lifetimeIlm < level.threshold) return level.threshold - _lifetimeIlm;
     }
     return null;
   }
 
-  void _earnIlm(int amount) {
+  void _earnIlm(double amount) {
     _ilmBalance += amount;
     _ilmEarnedToday += amount;
     _lifetimeIlm += amount;
+  }
+
+  void _deductIlm(double amount) {
+    _ilmBalance = (_ilmBalance - amount).clamp(0.0, 1e9);
+    _ilmEarnedToday = (_ilmEarnedToday - amount).clamp(0.0, 1e9);
   }
 
   List<ChallengeDoor> get doors => const [
@@ -384,14 +407,19 @@ class ChallengeRepository extends ChangeNotifier {
     final dayAnswered = (_answeredCountByDay[_activeDayNumber] ??= <String, int>{});
     dayAnswered[doorId] = (dayAnswered[doorId] ?? 0) + 1;
 
+    final dayDoorIlm = (_ilmByDoorAndDay[_activeDayNumber] ??= <String, double>{});
     final isCorrect = selectedIndex == question.correctIndex;
     if (isCorrect) {
       final dayCorrect = (_correctCountByDay[_activeDayNumber] ??= <String, int>{});
       dayCorrect[doorId] = (dayCorrect[doorId] ?? 0) + 1;
+      dayDoorIlm[doorId] =
+          ((dayDoorIlm[doorId] ?? 0.0) + ilmCorrectReward).clamp(0.0, 1e9);
       _drawEntriesCount++;
       _earnIlm(ilmCorrectReward);
     } else {
-      _earnIlm(ilmLearningReward);
+      dayDoorIlm[doorId] =
+          ((dayDoorIlm[doorId] ?? 0.0) - ilmWrongPenalty).clamp(0.0, 1e9);
+      _deductIlm(ilmWrongPenalty);
     }
     notifyListeners();
     return isCorrect;
@@ -415,7 +443,7 @@ class ChallengeRepository extends ChangeNotifier {
       );
     }
     _redeemedCodes.add(code);
-    _earnIlm(ilmReferralReward);
+    _earnIlm(ilmReferralReward.toDouble());
     notifyListeners();
     return (
       success: true,
@@ -423,53 +451,215 @@ class ChallengeRepository extends ChangeNotifier {
     );
   }
 
-  List<ChallengeWinner> get winners => const [
-        ChallengeWinner(
-          id: 'win_1',
-          displayName: 'SAMIRA BINTA ZAKARIA',
-          prizeTitle: 'Umrah trip for two',
-          country: 'Bangladesh',
-          isToday: true,
-          isSpotlight: true,
-          dateLabel: 'Today',
-        ),
-        ChallengeWinner(
-          id: 'win_2',
-          displayName: 'YUSUF I***** K***',
-          prizeTitle: 'Umrah trip for two',
-          country: 'Indonesia',
-          isToday: true,
+  /// True when the user holds at least [minIlmForRaffleSpin] (250) Ilm to spin
+  /// the Raffle Wheel.
+  bool get canSpinRaffle => ilmBalance >= minIlmForRaffleSpin;
+
+  /// Remaining Ilm needed to reach the [minIlmForRaffleSpin] (250) threshold.
+  double get ilmNeededForRaffle =>
+      (minIlmForRaffleSpin - ilmBalance).clamp(0.0, minIlmForRaffleSpin.toDouble());
+
+  static const List<RaffleParticipant> _baseRaffleParticipants = [
+    RaffleParticipant(
+      id: 'raf_1',
+      displayName: 'Samira B. Zakaria',
+      country: 'Bangladesh',
+      ilmScore: 340,
+      prizeTitle: 'Umrah trip for two',
+    ),
+    RaffleParticipant(
+      id: 'raf_2',
+      displayName: 'Yusuf I. Pratama',
+      country: 'Indonesia',
+      ilmScore: 325,
+      prizeTitle: 'Umrah trip for two',
+    ),
+    RaffleParticipant(
+      id: 'raf_3',
+      displayName: 'Fatimah Al-Harbi',
+      country: 'Saudi Arabia',
+      ilmScore: 312,
+      prizeTitle: 'Umrah trip for two',
+    ),
+    RaffleParticipant(
+      id: 'raf_4',
+      displayName: 'Naeem H. Malik',
+      country: 'Pakistan',
+      ilmScore: 298,
+      prizeTitle: '20 cartons of Zamzam water',
+    ),
+    RaffleParticipant(
+      id: 'raf_5',
+      displayName: 'Ahmed E. Farouk',
+      country: 'Egypt',
+      ilmScore: 290,
+      prizeTitle: 'Umrah trip for two',
+    ),
+    RaffleParticipant(
+      id: 'raf_6',
+      displayName: 'Heba G. Suleiman',
+      country: 'Jordan',
+      ilmScore: 284,
+      prizeTitle: '20 cartons of Zamzam water',
+    ),
+    RaffleParticipant(
+      id: 'raf_7',
+      displayName: 'Tariq Al-Mansoor',
+      country: 'Morocco',
+      ilmScore: 278,
+      prizeTitle: 'Umrah trip for two',
+    ),
+    RaffleParticipant(
+      id: 'raf_8',
+      displayName: 'Aisha Siddiqua',
+      country: 'Malaysia',
+      ilmScore: 272,
+      prizeTitle: 'Umrah trip for two',
+    ),
+    RaffleParticipant(
+      id: 'raf_9',
+      displayName: 'Zayd Ibn Kareem',
+      country: 'Turkey',
+      ilmScore: 268,
+      prizeTitle: '20 cartons of Zamzam water',
+    ),
+    RaffleParticipant(
+      id: 'raf_10',
+      displayName: 'Maryam Al-Qahtani',
+      country: 'United Arab Emirates',
+      ilmScore: 262,
+      prizeTitle: 'Umrah trip for two',
+    ),
+    RaffleParticipant(
+      id: 'raf_11',
+      displayName: 'Ibrahim O. Bello',
+      country: 'Nigeria',
+      ilmScore: 256,
+      prizeTitle: '20 cartons of Zamzam water',
+    ),
+    RaffleParticipant(
+      id: 'raf_12',
+      displayName: 'Khadijah N. Syah',
+      country: 'United Kingdom',
+      ilmScore: 250,
+      prizeTitle: 'Umrah trip for two',
+    ),
+  ];
+
+  /// Returns all 250+ Ilm-eligible seekers entered on the Islamic Raffle Wheel.
+  /// Automatically includes the current user once they reach [minIlmForRaffleSpin] (250 Ilm).
+  List<RaffleParticipant> eligibleRaffleParticipants({
+    String? currentUserName,
+    String? currentUserCountry,
+  }) {
+    final cleanName = (currentUserName ?? '').trim();
+    if (!canSpinRaffle || cleanName.isEmpty) {
+      return _baseRaffleParticipants;
+    }
+    return [
+      RaffleParticipant(
+        id: 'raf_current_user',
+        displayName: cleanName,
+        country: (currentUserCountry != null && currentUserCountry.isNotEmpty)
+            ? currentUserCountry
+            : 'Makkah Draw',
+        ilmScore: ilmBalance,
+        prizeTitle: 'Umrah trip for two',
+        isCurrentUser: true,
+      ),
+      ..._baseRaffleParticipants.take(11),
+    ];
+  }
+
+  RaffleParticipant? _selectedRaffleWinner;
+  RaffleParticipant? get selectedRaffleWinner => _selectedRaffleWinner;
+
+  final List<ChallengeWinner> _winners = [
+    const ChallengeWinner(
+      id: 'win_1',
+      displayName: 'SAMIRA BINTA ZAKARIA',
+      prizeTitle: 'Umrah trip for two',
+      country: 'Bangladesh',
+      isToday: true,
+      isSpotlight: true,
+      dateLabel: 'Today',
+    ),
+    const ChallengeWinner(
+      id: 'win_2',
+      displayName: 'YUSUF I***** K***',
+      prizeTitle: 'Umrah trip for two',
+      country: 'Indonesia',
+      isToday: true,
+      isSpotlight: false,
+      dateLabel: 'Today',
+    ),
+    const ChallengeWinner(
+      id: 'win_3',
+      displayName: 'NAEEM H*** M***',
+      prizeTitle: '20 cartons of Zamzam water',
+      country: 'Pakistan',
+      isToday: false,
+      isSpotlight: false,
+      dateLabel: 'Yesterday',
+    ),
+    const ChallengeWinner(
+      id: 'win_4',
+      displayName: 'AHMED E****** F***',
+      prizeTitle: '20 cartons of Zamzam water',
+      country: 'Egypt',
+      isToday: false,
+      isSpotlight: false,
+      dateLabel: 'Yesterday',
+    ),
+    const ChallengeWinner(
+      id: 'win_5',
+      displayName: 'HEBA G**** S*****',
+      prizeTitle: '20 cartons of Zamzam water',
+      country: 'Jordan',
+      isToday: false,
+      isSpotlight: false,
+      dateLabel: '2 days ago',
+    ),
+  ];
+
+  List<ChallengeWinner> get winners => List.unmodifiable(_winners);
+
+  /// Records the winner selected by the Islamic Ilm Raffle Wheel as today's
+  /// spotlight winner and promotes them to the top of Today's winners list.
+  void recordRaffleWinner(RaffleParticipant participant) {
+    _selectedRaffleWinner = participant;
+    final upperName = participant.displayName.toUpperCase();
+    for (var i = 0; i < _winners.length; i++) {
+      final w = _winners[i];
+      if (w.isSpotlight) {
+        _winners[i] = ChallengeWinner(
+          id: w.id,
+          displayName: w.displayName,
+          prizeTitle: w.prizeTitle,
+          country: w.country,
+          isToday: w.isToday,
           isSpotlight: false,
-          dateLabel: 'Today',
-        ),
-        ChallengeWinner(
-          id: 'win_3',
-          displayName: 'NAEEM H*** M***',
-          prizeTitle: '20 cartons of Zamzam water',
-          country: 'Pakistan',
-          isToday: false,
-          isSpotlight: false,
-          dateLabel: 'Yesterday',
-        ),
-        ChallengeWinner(
-          id: 'win_4',
-          displayName: 'AHMED E****** F***',
-          prizeTitle: '20 cartons of Zamzam water',
-          country: 'Egypt',
-          isToday: false,
-          isSpotlight: false,
-          dateLabel: 'Yesterday',
-        ),
-        ChallengeWinner(
-          id: 'win_5',
-          displayName: 'HEBA G**** S*****',
-          prizeTitle: '20 cartons of Zamzam water',
-          country: 'Jordan',
-          isToday: false,
-          isSpotlight: false,
-          dateLabel: '2 days ago',
-        ),
-      ];
+          dateLabel: w.dateLabel,
+        );
+      }
+    }
+    _winners.removeWhere(
+      (w) => w.id == 'win_raffle_${participant.id}' || w.displayName == upperName,
+    );
+    _winners.insert(
+      0,
+      ChallengeWinner(
+        id: 'win_raffle_${participant.id}',
+        displayName: upperName,
+        prizeTitle: participant.prizeTitle,
+        country: participant.country,
+        isToday: true,
+        isSpotlight: true,
+        dateLabel: 'Today • Ilm Raffle',
+      ),
+    );
+    notifyListeners();
+  }
 
   List<ChallengeFaq> get faqs => const [
         ChallengeFaq(
@@ -480,7 +670,7 @@ class ChallengeRepository extends ChangeNotifier {
         ChallengeFaq(
           question: 'What is Ilm and how do I earn it?',
           answer:
-              'Ilm (knowledge) is your Challenge reward. You receive 2 Ilm each day, +2 Ilm for every correct answer, +1 Ilm for every attempt (you still learn!), and +3 Ilm when friends join with your invite code (try DUYA2026 or BARAKAH).',
+              'Ilm (knowledge) is your Challenge reward. You receive 2 Ilm each day, +0.125 Ilm for every correct answer (-0.125 Ilm for an incorrect answer), and +3 Ilm when friends join with your invite code (try DUYA2026 or BARAKAH).',
         ),
         ChallengeFaq(
           question: 'How is Ilm used?',

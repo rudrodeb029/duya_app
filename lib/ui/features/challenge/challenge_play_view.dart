@@ -57,8 +57,7 @@ class ChallengePlayView extends StatelessWidget {
               final door = challenge.doors[index];
               final exhausted = challenge.isDoorExhaustedToday(door.id);
               final joined = challenge.isDoorJoined(door.id);
-              final answered = challenge.answeredCountToday(door.id);
-              final dailyTotal = challenge.dailyQuestionsForDoor(door.id).length;
+              final doorIlm = challenge.doorIlmToday(door.id);
               final accentColor = Color(door.colorHex);
               final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -132,18 +131,18 @@ class ChallengePlayView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: exhausted
-                                    ? const Row(
+                                    ? Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.check_circle_rounded,
                                             size: 11,
                                             color: DuyaColors.emerald,
                                           ),
-                                          SizedBox(width: 3),
+                                          const SizedBox(width: 3),
                                           Text(
-                                            'Completed',
-                                            style: TextStyle(
+                                            '${ChallengeRepository.formatIlm(doorIlm)} Ilm',
+                                            style: const TextStyle(
                                               fontSize: 9.5,
                                               fontWeight: FontWeight.w700,
                                               color: DuyaColors.emerald,
@@ -151,58 +150,31 @@ class ChallengePlayView extends StatelessWidget {
                                           ),
                                         ],
                                       )
-                                    : answered > 0
-                                        ? Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(
-                                                joined
-                                                    ? Icons.check_circle_rounded
-                                                    : Icons.timelapse_rounded,
-                                                size: 11,
-                                                color: joined
-                                                    ? DuyaColors.emerald
-                                                    : DuyaColors.desertGold,
-                                              ),
-                                              const SizedBox(width: 3),
-                                              Text(
-                                                '$answered/$dailyTotal',
-                                                style: TextStyle(
-                                                  fontSize: 9.5,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: joined
-                                                      ? DuyaColors.emerald
-                                                      : (isDark
-                                                          ? DuyaColors
-                                                              .textPrimaryDark
-                                                          : const Color(
-                                                              0xFF10553F,
-                                                            )),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const IlmIcon(
-                                                size: 11,
-                                                color: DuyaColors.desertGold,
-                                              ),
-                                              const SizedBox(width: 3),
-                                              Text(
-                                                '${ChallengeRepository.ilmPerDoor} Ilm',
-                                                style: TextStyle(
-                                                  fontSize: 9.5,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: isDark
+                                    : Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const IlmIcon(
+                                            size: 11,
+                                            color: DuyaColors.desertGold,
+                                          ),
+                                          const SizedBox(width: 3),
+                                          Text(
+                                            '${ChallengeRepository.formatIlm(doorIlm)} Ilm',
+                                            style: TextStyle(
+                                              fontSize: 9.5,
+                                              fontWeight: FontWeight.w700,
+                                              color: joined
+                                                  ? DuyaColors.emerald
+                                                  : (isDark
                                                       ? DuyaColors
                                                           .textPrimaryDark
-                                                      : const Color(0xFF10553F),
-                                                ),
-                                              ),
-                                            ],
+                                                      : const Color(
+                                                          0xFF10553F,
+                                                        )),
+                                            ),
                                           ),
+                                        ],
+                                      ),
                               ),
                             ],
                           ),
