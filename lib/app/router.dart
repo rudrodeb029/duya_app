@@ -95,8 +95,8 @@ GoRouter createDuyaRouter({String initialLocation = '/splash'}) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/content',
-                builder: (context, state) => const ContentHubView(),
+                path: '/my-profile',
+                builder: (context, state) => const ProfileView(inShell: true),
               ),
             ],
           ),
@@ -168,6 +168,10 @@ GoRouter createDuyaRouter({String initialLocation = '/splash'}) {
       ),
 
       // Content Sub-pages (Qur'an, Duas, Live, Articles)
+      GoRoute(
+        path: '/content',
+        builder: (context, state) => const ContentHubView(),
+      ),
       GoRoute(
         path: '/content/quran',
         builder: (context, state) => QuranIndexView(

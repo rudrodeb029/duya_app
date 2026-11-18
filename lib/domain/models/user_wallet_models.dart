@@ -8,6 +8,12 @@ class UserProfile {
     required this.isGuest,
     required this.locationEnabled,
     required this.notificationsEnabled,
+    this.phone = '',
+    this.passportNumber = '',
+    this.dateOfBirth = '',
+    this.gender = '',
+    this.city = '',
+    this.emergencyContact = '',
   });
 
   final String id;
@@ -17,6 +23,12 @@ class UserProfile {
   final bool isGuest;
   final bool locationEnabled;
   final bool notificationsEnabled;
+  final String phone;
+  final String passportNumber;
+  final String dateOfBirth;
+  final String gender;
+  final String city;
+  final String emergencyContact;
 
   UserProfile copyWith({
     String? id,
@@ -26,6 +38,12 @@ class UserProfile {
     bool? isGuest,
     bool? locationEnabled,
     bool? notificationsEnabled,
+    String? phone,
+    String? passportNumber,
+    String? dateOfBirth,
+    String? gender,
+    String? city,
+    String? emergencyContact,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -35,6 +53,12 @@ class UserProfile {
       isGuest: isGuest ?? this.isGuest,
       locationEnabled: locationEnabled ?? this.locationEnabled,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      phone: phone ?? this.phone,
+      passportNumber: passportNumber ?? this.passportNumber,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      gender: gender ?? this.gender,
+      city: city ?? this.city,
+      emergencyContact: emergencyContact ?? this.emergencyContact,
     );
   }
 }

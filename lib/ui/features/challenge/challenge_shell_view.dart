@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/repositories/auth_profile_repository.dart';
 import '../../../data/repositories/challenge_repository.dart';
 import '../../core/theme/duya_colors.dart';
 import '../../core/widgets/duya_widgets.dart';
@@ -119,6 +121,7 @@ class ChallengeScaffold extends StatelessWidget {
   }
 
   void _showShareSheet(BuildContext context) {
+    final inviteCode = context.read<AuthProfileRepository>().inviteCode;
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
@@ -134,23 +137,20 @@ class ChallengeScaffold extends StatelessWidget {
               style: Theme.of(ctx).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Share code DUYA2026 with friends & family. Every friend who enters earns you +${ChallengeRepository.ilmReferralReward} Ilm!',
+            Text(
+              'Share your unique code $inviteCode with friends & family. Every friend who enters earns you +${ChallengeRepository.ilmReferralReward} Ilm!',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              decoration: BoxDecoration(
-                color: DuyaColors.desertGoldSoft,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: const Text(
-                'DUYA2026',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.8,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              color: Colors.transparent,
+              child: Text(
+                inviteCode,
+                style: const TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
                   color: DuyaColors.emerald,
                 ),
               ),
@@ -160,9 +160,19 @@ class ChallengeScaffold extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  Clipboard.setData(
+                    ClipboardData(
+                      text:
+                          'Join me on Duya! Use my unique invite code: $inviteCode',
+                    ),
+                  );
                   Navigator.of(ctx).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Invite code DUYA2026 ready to share!')),
+                    SnackBar(
+                      content: Text(
+                        'Invite code $inviteCode copied to clipboard!',
+                      ),
+                    ),
                   );
                 },
                 child: const Text('Copy Invite Link'),

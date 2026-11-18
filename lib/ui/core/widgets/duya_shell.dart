@@ -64,9 +64,9 @@ class DuyaShell extends StatelessWidget {
                   onTap: () => _goBranch(1),
                 ),
                 _NavTabItem(
-                  icon: Icons.grid_view_outlined,
-                  activeIcon: Icons.grid_view_rounded,
-                  label: s.navContent,
+                  icon: Icons.person_outline_rounded,
+                  activeIcon: Icons.person_rounded,
+                  label: isArabic ? 'الملف الشخصي' : 'Profile',
                   selected: current == 2,
                   onTap: () => _goBranch(2),
                 ),

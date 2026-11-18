@@ -53,12 +53,38 @@ class ChallengeRepository extends ChangeNotifier {
 
   static final DateTime _rotationEpoch = DateTime.utc(2026, 1, 1);
 
-  /// Seeker levels unlocked by lifetime Ilm earned (threshold → title).
+  /// 30 progressive seeker levels unlocked by lifetime Ilm earned.
   static const List<({int threshold, String title})> ilmLevels = [
-    (threshold: 0, title: 'Talib'),
-    (threshold: 10, title: 'Seeker'),
-    (threshold: 25, title: 'Scholar'),
-    (threshold: 50, title: 'Alim'),
+    (threshold: 0, title: 'Lv. 1 • Talib'),
+    (threshold: 2, title: 'Lv. 2 • Muta’allim'),
+    (threshold: 5, title: 'Lv. 3 • Seeker'),
+    (threshold: 8, title: 'Lv. 4 • Muhibb'),
+    (threshold: 12, title: 'Lv. 5 • Qari'),
+    (threshold: 16, title: 'Lv. 6 • Tilawah'),
+    (threshold: 20, title: 'Lv. 7 • Dhakir'),
+    (threshold: 25, title: 'Lv. 8 • Murid'),
+    (threshold: 30, title: 'Lv. 9 • Salik'),
+    (threshold: 36, title: 'Lv. 10 • Sadiq'),
+    (threshold: 42, title: 'Lv. 11 • Muhsin'),
+    (threshold: 48, title: 'Lv. 12 • Zahid'),
+    (threshold: 55, title: 'Lv. 13 • Abid'),
+    (threshold: 62, title: 'Lv. 14 • Hafiz'),
+    (threshold: 70, title: 'Lv. 15 • Muhaddith'),
+    (threshold: 80, title: 'Lv. 16 • Mufassir'),
+    (threshold: 90, title: 'Lv. 17 • Faqih'),
+    (threshold: 100, title: 'Lv. 18 • Scholar'),
+    (threshold: 112, title: 'Lv. 19 • Ustadh'),
+    (threshold: 125, title: 'Lv. 20 • Mudarris'),
+    (threshold: 138, title: 'Lv. 21 • Muallim'),
+    (threshold: 150, title: 'Lv. 22 • Murabbi'),
+    (threshold: 165, title: 'Lv. 23 • Arif'),
+    (threshold: 180, title: 'Lv. 24 • Hakim'),
+    (threshold: 195, title: 'Lv. 25 • Rashid'),
+    (threshold: 210, title: 'Lv. 26 • Mujtahid'),
+    (threshold: 225, title: 'Lv. 27 • Imam'),
+    (threshold: 235, title: 'Lv. 28 • Allamah'),
+    (threshold: 245, title: 'Lv. 29 • Alim'),
+    (threshold: 250, title: 'Lv. 30 • Grand Alim'),
   ];
 
   final DateTime Function() _clock;
@@ -425,21 +451,33 @@ class ChallengeRepository extends ChangeNotifier {
     return isCorrect;
   }
 
-  /// Validates a referral/promo code (`DUYA2026`, `BARAKAH`, `HARAMAIN`).
-  ({bool success, String message}) redeemCode(String rawCode) {
+  /// Validates a friend's unique invite code (e.g. `DUYA-XXXXXX`) or promo code.
+  ({bool success, String message}) redeemCode(
+    String rawCode, {
+    String? ownInviteCode,
+  }) {
     _syncDayRollover();
     final code = rawCode.trim().toUpperCase();
     if (code.isEmpty) {
       return (success: false, message: 'Please enter a valid invite code.');
     }
+    if (ownInviteCode != null &&
+        ownInviteCode.trim().isNotEmpty &&
+        code == ownInviteCode.trim().toUpperCase()) {
+      return (
+        success: false,
+        message: 'You cannot redeem your own unique invite code.',
+      );
+    }
     if (_redeemedCodes.contains(code)) {
       return (success: false, message: 'This code has already been redeemed.');
     }
     const validCodes = {'DUYA2026', 'BARAKAH', 'HARAMAIN', 'UMRAH100'};
-    if (!validCodes.contains(code) && code.length < 6) {
+    final isUserInviteFormat = RegExp(r'^DUYA-[A-Z0-9]{6}$').hasMatch(code);
+    if (!validCodes.contains(code) && !isUserInviteFormat && code.length < 6) {
       return (
         success: false,
-        message: 'Code not recognized. Try DUYA2026 or BARAKAH.',
+        message: 'Code not recognized. Enter a valid DUYA-XXXXXX invite code.',
       );
     }
     _redeemedCodes.add(code);

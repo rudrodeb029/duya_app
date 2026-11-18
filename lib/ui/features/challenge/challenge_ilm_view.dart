@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/repositories/auth_profile_repository.dart';
 import '../../../data/repositories/challenge_repository.dart';
 import '../../core/theme/duya_colors.dart';
 import '../../core/widgets/duya_widgets.dart';
@@ -44,12 +45,12 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
     return ChallengeScaffold(
       currentIndex: 2,
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         children: [
           Text(
             'Knowledge rewards',
             style: TextStyle(
-              fontSize: 10.5,
+              fontSize: 9.0,
               fontWeight: FontWeight.w500,
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
@@ -58,14 +59,14 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
           Text(
             'Your Ilm',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontSize: 15,
+                  fontSize: 12.5,
                   fontWeight: FontWeight.w700,
                 ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           // Balance hero card
           Container(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF0E4A38), Color(0xFF16634B)],
@@ -80,8 +81,8 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
               children: [
                 Row(
                   children: [
-                    const IlmIcon(size: 40, color: Color(0xFFE2C378)),
-                    const SizedBox(width: 14),
+                    const IlmIcon(size: 32, color: Color(0xFFE2C378)),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,16 +91,16 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                             '${ChallengeRepository.formatIlm(repo.ilmBalance)} Ilm',
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 24,
+                              fontSize: 18.5,
                               fontWeight: FontWeight.w800,
-                              letterSpacing: -0.5,
+                              letterSpacing: -0.4,
                             ),
                           ),
                           Text(
-                            'Level: ${repo.ilmLevel}',
+                            '${repo.ilmLevel} (${currentIdx + 1}/${levels.length})',
                             style: const TextStyle(
                               color: Color(0xFFE2C378),
-                              fontSize: 11.5,
+                              fontSize: 10.0,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -108,30 +109,30 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 10),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: LinearProgressIndicator(
                     value: progress.clamp(0.0, 1.0),
-                    minHeight: 6,
+                    minHeight: 5,
                     backgroundColor: Colors.white.withValues(alpha: 0.18),
                     valueColor: const AlwaysStoppedAnimation(Color(0xFFE2C378)),
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 5),
                 Text(
                   toNext == null
-                      ? 'Highest level reached — MashaAllah!'
+                      ? 'Highest level (${levels.length}/${levels.length}) reached — MashaAllah!'
                       : '${ChallengeRepository.formatIlm(toNext)} Ilm to reach ${levels[currentIdx + 1].title}',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.85),
-                    fontSize: 10.5,
+                    fontSize: 9.2,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           // Today stats
           Row(
             children: [
@@ -139,23 +140,29 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                 label: 'Earned today',
                 value: '+${ChallengeRepository.formatIlm(repo.ilmEarnedToday)}',
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               _StatTile(
                 label: 'Doors opened',
                 value: '${repo.completedDoorsCount}/${repo.doors.length}',
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               _StatTile(
                 label: 'Draw entries',
                 value: '${repo.drawEntriesCount}',
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text('How Ilm works', style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 14),
+          Text(
+            'How Ilm works',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+          ),
           const SizedBox(height: 8),
           const DuyaCard(
-            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             child: Column(
               children: [
                 _RuleTile(
@@ -186,31 +193,50 @@ class _ChallengeIlmViewState extends State<ChallengeIlmView> {
                 _RuleTile(
                   icon: Icons.share_outlined,
                   title: 'Invite a friend',
-                  subtitle: 'Share DUYA2026 or BARAKAH with family.',
+                  subtitle: 'Share your unique invite code with family.',
                   amount: '+${ChallengeRepository.ilmReferralReward}',
                   showDivider: false,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           TextField(
             controller: _codeController,
+            style: const TextStyle(fontSize: 11.0),
             decoration: const InputDecoration(
-              hintText: 'Add invite code to earn Ilm (e.g. DUYA2026)',
-              prefixIcon: Icon(Icons.confirmation_number_outlined),
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
+              hintText: 'Add friend’s invite code (e.g. DUYA-XXXXXX)',
+              hintStyle: TextStyle(fontSize: 10.5),
+              prefixIcon: Icon(Icons.confirmation_number_outlined, size: 18),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 38),
+              padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 16),
+            ),
             onPressed: () {
-              final res = repo.redeemCode(_codeController.text);
+              final ownCode =
+                  context.read<AuthProfileRepository>().inviteCode;
+              final res = repo.redeemCode(
+                _codeController.text,
+                ownInviteCode: ownCode,
+              );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(res.message)),
               );
               if (res.success) _codeController.clear();
             },
-            child: const Text('Check the code'),
+            child: const Text(
+              'Check the code',
+              style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600),
+            ),
           ),
         ],
       ),
@@ -228,14 +254,14 @@ class _StatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: DuyaCard(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
         child: Column(
           children: [
             Text(
               value,
               style: const TextStyle(
                 color: DuyaColors.emerald,
-                fontSize: 16,
+                fontSize: 13.0,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -244,7 +270,10 @@ class _StatTile extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(fontSize: 9.5),
             ),
           ],
         ),
@@ -299,23 +328,26 @@ class _RuleTile extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 12.5,
+                    fontSize: 10.8,
                   ),
                 ),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                  subtitle,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(fontSize: 9.5),
+                ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: isCost ? const Color(0xFFF3F5F4) : DuyaColors.desertGoldSoft,
-              borderRadius: BorderRadius.circular(20),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            color: Colors.transparent,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const IlmIcon(size: 11, color: Color(0xFFC79A3C)),
+                const IlmIcon(size: 10, color: Color(0xFFC79A3C)),
                 const SizedBox(width: 4),
                 Text(
                   amount,
@@ -323,8 +355,8 @@ class _RuleTile extends StatelessWidget {
                     color: isCost
                         ? DuyaColors.textSecondaryLight
                         : DuyaColors.emerald,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
+                    fontSize: 9.8,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ],

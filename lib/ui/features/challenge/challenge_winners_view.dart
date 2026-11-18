@@ -80,6 +80,23 @@ class _ChallengeWinnersViewState extends State<ChallengeWinnersView>
     );
   }
 
+  void _handleSpinRequest() {
+    final repo = context.read<ChallengeRepository>();
+    if (!repo.canSpinRaffle) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              'Minimum ${ChallengeRepository.minIlmForRaffleSpin} Ilm required to spin the raffle (you have ${ChallengeRepository.formatIlm(repo.ilmBalance)} Ilm — need ${ChallengeRepository.formatIlm(repo.ilmNeededForRaffle)} more Ilm).',
+            ),
+          ),
+        );
+      return;
+    }
+    _spinWheel();
+  }
+
   void _spinWheel({bool initialSpin = false}) {
     final participants = _getParticipants(context);
     if (participants.isEmpty) return;
@@ -153,10 +170,11 @@ class _ChallengeWinnersViewState extends State<ChallengeWinnersView>
             participants: participants,
             rotationAnimation: _rotationAnimation,
             isSpinning: _spinController.isAnimating,
+            canSpin: repo.canSpinRaffle,
             winner: activeWinner,
             showWinnerCard: _showWinnerCard,
-            onSpinAgain: () => _spinWheel(),
-            onCenterHubSpin: () => _spinWheel(),
+            onSpinAgain: _handleSpinRequest,
+            onCenterHubSpin: _handleSpinRequest,
             onToggleWinnerCard: () =>
                 setState(() => _showWinnerCard = !_showWinnerCard),
           ),
@@ -332,6 +350,7 @@ class _IslamicRaffleWheelSpotlight extends StatelessWidget {
     required this.participants,
     required this.rotationAnimation,
     required this.isSpinning,
+    required this.canSpin,
     required this.winner,
     required this.showWinnerCard,
     required this.onSpinAgain,
@@ -342,6 +361,7 @@ class _IslamicRaffleWheelSpotlight extends StatelessWidget {
   final List<RaffleParticipant> participants;
   final Animation<double> rotationAnimation;
   final bool isSpinning;
+  final bool canSpin;
   final RaffleParticipant winner;
   final bool showWinnerCard;
   final VoidCallback onSpinAgain;
@@ -368,6 +388,7 @@ class _IslamicRaffleWheelSpotlight extends StatelessWidget {
                       painter: _IslamicRaffleWheelPainter(
                         participants: participants,
                         rotation: rotationAnimation.value,
+                        canSpin: canSpin,
                         highlightedId:
                             !isSpinning ? winner.id : null,
                       ),
@@ -562,11 +583,13 @@ class _IslamicRaffleWheelPainter extends CustomPainter {
   _IslamicRaffleWheelPainter({
     required this.participants,
     required this.rotation,
+    required this.canSpin,
     this.highlightedId,
   });
 
   final List<RaffleParticipant> participants;
   final double rotation;
+  final bool canSpin;
   final String? highlightedId;
 
   @override
@@ -691,15 +714,17 @@ class _IslamicRaffleWheelPainter extends CustomPainter {
       ..strokeWidth = 2.0;
     canvas.drawCircle(center, hubRadius, hubBorder);
 
-    // "SPIN" label inside the center hub
+    // "SPIN" label inside the center hub (shows 250 Ilm requirement when locked)
     final spinLabel = TextPainter(
-      text: const TextSpan(
-        text: 'SPIN',
+      text: TextSpan(
+        text: canSpin ? 'SPIN' : '250 Ilm',
         style: TextStyle(
-          color: Color(0xFFFFF3C4),
-          fontSize: 10.0,
+          color: canSpin
+              ? const Color(0xFFFFF3C4)
+              : const Color(0xFFFFF3C4).withValues(alpha: 0.8),
+          fontSize: canSpin ? 10.0 : 8.5,
           fontWeight: FontWeight.w800,
-          letterSpacing: 1.1,
+          letterSpacing: canSpin ? 1.1 : 0.4,
         ),
       ),
       textDirection: TextDirection.ltr,
@@ -819,6 +844,7 @@ class _IslamicRaffleWheelPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _IslamicRaffleWheelPainter oldDelegate) {
     return oldDelegate.rotation != rotation ||
+        oldDelegate.canSpin != canSpin ||
         oldDelegate.highlightedId != highlightedId ||
         oldDelegate.participants.length != participants.length;
   }

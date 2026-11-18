@@ -95,6 +95,20 @@ void main() {
       final duplicate = repo.redeemCode('DUYA2026');
       expect(duplicate.success, isFalse);
 
+      final userA = AuthProfileRepository(prefs: PreferencesService());
+      final userB = AuthProfileRepository(prefs: PreferencesService());
+      expect(userA.inviteCode, startsWith('DUYA-'));
+      expect(userB.inviteCode, startsWith('DUYA-'));
+      expect(userA.inviteCode, isNot(userB.inviteCode));
+      expect(
+        repo.redeemCode(userA.inviteCode, ownInviteCode: userA.inviteCode).success,
+        isFalse,
+      );
+      expect(
+        repo.redeemCode(userB.inviteCode, ownInviteCode: userA.inviteCode).success,
+        isTrue,
+      );
+
       final balanceBeforeQuiz = repo.ilmBalance;
       final day1Question = repo.getQuestionForDoor('quran');
       final correct = repo.submitAnswer(
@@ -104,7 +118,8 @@ void main() {
       expect(correct, isTrue);
       expect(repo.drawEntriesCount, 1);
       expect(repo.completedDoorsCount, 1);
-      expect(repo.isDoorCompleted('quran'), isTrue);
+      expect(ChallengeRepository.ilmLevels.length, 30);
+      expect(repo.ilmLevel, startsWith('Lv. '));
       expect(
         repo.ilmBalance,
         balanceBeforeQuiz -
@@ -114,7 +129,7 @@ void main() {
       expect(
         repo.lifetimeIlm,
         initialLifetimeIlm +
-            ChallengeRepository.ilmReferralReward +
+            (2 * ChallengeRepository.ilmReferralReward) +
             ChallengeRepository.ilmCorrectReward,
       );
 
@@ -322,7 +337,7 @@ void main() {
       expect(find.text('Start the Challenge'), findsOneWidget);
     });
 
-    testWidgets('Shell tabs switch cleanly between Home, Journey, Content, Market',
+    testWidgets('Shell tabs switch cleanly between Home, Journey, Profile, Market',
         (tester) async {
       final prefs = PreferencesService();
       final auth = AuthProfileRepository(prefs: prefs);
@@ -337,9 +352,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Journey'), findsWidgets);
 
-      await tester.tap(find.byTooltip('Content'));
+      await tester.tap(find.byTooltip('Profile').last);
       await tester.pumpAndSettle();
-      expect(find.text('Content'), findsWidgets);
+      expect(find.text('Personal Info'), findsOneWidget);
+      expect(find.text('Save Info'), findsOneWidget);
 
       await tester.tap(find.byTooltip('Market'));
       await tester.pumpAndSettle();

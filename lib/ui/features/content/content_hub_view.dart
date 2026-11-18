@@ -32,14 +32,16 @@ class _ContentHubViewState extends State<ContentHubView> {
             .where((a) => a.topic == _selectedTopic)
             .toList();
 
-    return DuyaDaylightBackground(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: DuyaDaylightHeader(
-              title: isArabic ? 'مركز المحتوى' : 'Content',
-              showBack: false,
-              showLogo: true,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: DuyaDaylightBackground(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: DuyaDaylightHeader(
+                title: isArabic ? 'مركز المحتوى' : 'Content',
+                showBack: true,
+                showLogo: false,
               actions: [
                 DuyaCircleActionButton(
                   icon: Icons.person,
@@ -430,6 +432,7 @@ class _ContentHubViewState extends State<ContentHubView> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
