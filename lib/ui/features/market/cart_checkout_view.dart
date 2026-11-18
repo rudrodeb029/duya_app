@@ -21,7 +21,7 @@ class _CartCheckoutViewState extends State<CartCheckoutView> {
     final repo = context.watch<MarketWalletRepository>();
 
     return DuyaSubpageScaffold(
-      title: 'Bag & Checkout',
+      title: 'Bag',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

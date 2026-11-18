@@ -24,7 +24,7 @@ class _HaramServicesViewState extends State<HaramServicesView> {
     final repo = context.watch<PrayerRitualRepository>();
 
     return DuyaSubpageScaffold(
-      title: 'Haram Mobility & Zamzam',
+      title: 'Haram Services',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

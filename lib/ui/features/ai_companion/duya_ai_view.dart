@@ -35,7 +35,7 @@ class _DuyaAiViewState extends State<DuyaAiView> {
     final repo = context.watch<AiRepository>();
 
     return DuyaSubpageScaffold(
-      title: 'Duya AI Companion',
+      title: 'Duya AI',
       subtitle: 'Ask about Umrah, Duas & daily worship',
       body: Column(
         children: [

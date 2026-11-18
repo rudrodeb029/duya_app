@@ -22,7 +22,7 @@ class MarketHomeView extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: DuyaDaylightHeader(
-              title: isArabic ? 'متجر دعاء' : 'Duya Market',
+              title: isArabic ? 'متجر دعاء' : 'Market',
               showBack: false,
               showLogo: true,
               actions: [

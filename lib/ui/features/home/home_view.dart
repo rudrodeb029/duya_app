@@ -500,19 +500,19 @@ class HomeView extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Color(0xFF1A382E),
-                                fontSize: 15.5,
+                                fontSize: 14.5,
                                 height: 1.2,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
                             const SizedBox(height: 6),
                             const Text(
-                              'Open a knowledge door daily, answer correctly, and enter the draw for you and a loved one.',
+                              'Answer 8 doors daily, earn 250 Ilm & spin the Umrah Raffle Draw.',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Color(0xFF536A61),
-                                fontSize: 10.5,
+                                fontSize: 10.2,
                                 height: 1.35,
                               ),
                             ),

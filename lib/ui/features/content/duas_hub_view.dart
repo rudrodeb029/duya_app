@@ -32,7 +32,7 @@ class _DuasHubViewState extends State<DuasHubView> {
             .toList();
 
     return DuyaSubpageScaffold(
-      title: 'Duas & Athkar',
+      title: 'Duas',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

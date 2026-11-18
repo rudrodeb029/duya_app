@@ -33,7 +33,13 @@ class ChallengeScaffold extends StatelessWidget {
           children: [
             DuyaDaylightHeader(
               title: title ??
-                  (currentIndex == 1 ? 'Raffle Draw' : 'Knowledge Challenge'),
+                  switch (currentIndex) {
+                    0 => 'Doors',
+                    1 => 'Raffle',
+                    2 => 'Ilm',
+                    4 => 'Help',
+                    _ => 'Challenge',
+                  },
               showBack: true,
               onBack: () => context.go('/home'),
               actions: [

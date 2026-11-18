@@ -37,7 +37,7 @@ class _JourneyViewState extends State<JourneyView> {
         slivers: [
           SliverToBoxAdapter(
             child: DuyaDaylightHeader(
-              title: isArabic ? 'رحلة العمرة والزيارة' : 'Your Journey',
+              title: isArabic ? 'رحلة العمرة والزيارة' : 'Journey',
               showBack: false,
               showLogo: true,
               actions: [
@@ -75,12 +75,23 @@ class _JourneyViewState extends State<JourneyView> {
           ),
           // Unified Search
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
             sliver: SliverToBoxAdapter(
               child: TextField(
+                style: const TextStyle(fontSize: 11.5),
                 decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: DuyaColors.emerald),
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: DuyaColors.emerald,
+                    size: 18,
+                  ),
                   hintText: 'Search restaurants, Ziyarat, Makkah & Madinah...',
+                  hintStyle: TextStyle(fontSize: 11.0),
                 ),
                 onChanged: (v) => setState(() => _search = v),
               ),
@@ -89,7 +100,7 @@ class _JourneyViewState extends State<JourneyView> {
           // Featured Restaurants & Heritage Dining
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
               child: DuyaSectionHeader(
                 title: 'Featured Restaurants & Places',
                 onActionTap: () => context.push('/journey/places'),
@@ -98,24 +109,24 @@ class _JourneyViewState extends State<JourneyView> {
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 124,
+              height: 98,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: featuredRestaurants.length,
-                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                separatorBuilder: (_, _) => const SizedBox(width: 10),
                 itemBuilder: (context, index) {
                   final place = featuredRestaurants[index];
                   return SizedBox(
-                    width: 248,
+                    width: 224,
                     child: DuyaCard(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(10),
                       onTap: () => context.push('/journey/places'),
                       child: Row(
                         children: [
                           Container(
-                            width: 56,
-                            height: 68,
+                            width: 46,
+                            height: 56,
                             decoration: BoxDecoration(
                               color: const Color(0xFFE7F3EE),
                               borderRadius: BorderRadius.circular(10),
@@ -123,10 +134,10 @@ class _JourneyViewState extends State<JourneyView> {
                             child: const Icon(
                               Icons.restaurant_menu,
                               color: DuyaColors.emerald,
-                              size: 26,
+                              size: 21,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,27 +149,30 @@ class _JourneyViewState extends State<JourneyView> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 9.0,
                                     color: DuyaColors.emerald,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                const SizedBox(height: 3),
+                                const SizedBox(height: 2),
                                 Text(
                                   place.name,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 13.5,
+                                    fontSize: 11.5,
                                   ),
                                 ),
-                                const SizedBox(height: 3),
+                                const SizedBox(height: 2),
                                 Text(
                                   '${place.city} • ★ ${place.rating}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontSize: 10.0),
                                 ),
                               ],
                             ),
@@ -173,7 +187,7 @@ class _JourneyViewState extends State<JourneyView> {
           ),
           // Clock Tower Museum Experience Card
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 18, 16, 12),
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
             sliver: SliverToBoxAdapter(
               child: DuyaDaylightBannerCard(
                 imageAsset: 'assets/images/promo_madinah_hotel.jpg',
@@ -183,34 +197,50 @@ class _JourneyViewState extends State<JourneyView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 220),
+                      constraints: const BoxConstraints(maxWidth: 215),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Explore ${clockTower.title}',
                             style: const TextStyle(
-                              fontSize: 15.5,
-                              fontWeight: FontWeight.w800,
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w700,
                               color: Color(0xFF10553F),
                               height: 1.2,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 5),
                           Text(
                             clockTower.description,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontSize: 10.0, height: 1.3),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(0, 34),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
+                      ),
                       onPressed: () =>
                           context.push('/journey/attraction/${clockTower.id}'),
-                      child: const Text('View Tickets'),
+                      child: const Text(
+                        'View Tickets',
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -219,52 +249,66 @@ class _JourneyViewState extends State<JourneyView> {
           ),
           // AI Trip Planner CTA
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 2, 16, 28),
+            padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
             sliver: SliverToBoxAdapter(
               child: DuyaCard(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(7),
+                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: const Color(0xFFE7F3EE),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
                             Icons.auto_awesome,
                             color: DuyaColors.emerald,
-                            size: 18,
+                            size: 15,
                           ),
                         ),
                         const SizedBox(width: 8),
                         const Text(
                           'Try Duya AI Planner',
                           style: TextStyle(
+                            fontSize: 11.0,
                             fontWeight: FontWeight.w700,
                             color: DuyaColors.emerald,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Text(
                       'Build a trip plan for me that includes the best spiritual & heritage experiences in Makkah and Madinah',
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.titleMedium?.color,
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                        fontSize: 11.0,
+                        fontWeight: FontWeight.w500,
                         height: 1.35,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(0, 36),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
+                      ),
                       onPressed: () => context.push('/journey/trip-builder'),
-                      icon: const Icon(Icons.arrow_forward, size: 18),
-                      label: const Text('Build Your Trip Now'),
+                      icon: const Icon(Icons.arrow_forward, size: 15),
+                      label: const Text(
+                        'Build Your Trip Now',
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),

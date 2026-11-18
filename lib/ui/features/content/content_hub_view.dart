@@ -37,7 +37,7 @@ class _ContentHubViewState extends State<ContentHubView> {
         slivers: [
           SliverToBoxAdapter(
             child: DuyaDaylightHeader(
-              title: isArabic ? 'مركز المحتوى' : 'Content Hub',
+              title: isArabic ? 'مركز المحتوى' : 'Content',
               showBack: false,
               showLogo: true,
               actions: [
@@ -76,7 +76,7 @@ class _ContentHubViewState extends State<ContentHubView> {
           // Live Haramain Broadcasts
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
               child: DuyaSectionHeader(
                 title: isArabic ? 'البث المباشر للحرمين' : 'Live from Al-Haramain',
               ),
@@ -84,27 +84,27 @@ class _ContentHubViewState extends State<ContentHubView> {
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 176,
+              height: 146,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: repo.liveChannels.length,
-                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                separatorBuilder: (_, _) => const SizedBox(width: 10),
                 itemBuilder: (context, index) {
                   final ch = repo.liveChannels[index];
                   return SizedBox(
-                    width: 280,
+                    width: 248,
                     child: DuyaDaylightBannerCard(
                       imageAsset: 'assets/images/live_mosque_day.jpg',
                       onTap: () => context.push('/content/live/${ch.id}'),
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(13),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 9,
-                              vertical: 4,
+                              horizontal: 8,
+                              vertical: 3,
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFD62B2B),
@@ -113,14 +113,14 @@ class _ContentHubViewState extends State<ContentHubView> {
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.circle, size: 7, color: Colors.white),
-                                SizedBox(width: 5),
+                                Icon(Icons.circle, size: 6, color: Colors.white),
+                                SizedBox(width: 4),
                                 Text(
                                   'LIVE',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800,
-                                    fontSize: 9.5,
+                                    fontSize: 8.5,
                                   ),
                                 ),
                               ],
@@ -128,7 +128,7 @@ class _ContentHubViewState extends State<ContentHubView> {
                           ),
                           const Spacer(),
                           ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 168),
+                            constraints: const BoxConstraints(maxWidth: 162),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -138,12 +138,12 @@ class _ContentHubViewState extends State<ContentHubView> {
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     color: Color(0xFF10553F),
-                                    fontSize: 13.5,
-                                    fontWeight: FontWeight.w800,
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w700,
                                     height: 1.2,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 3),
                                 Text(
                                   ch.mosqueName,
                                   maxLines: 1,
@@ -153,7 +153,7 @@ class _ContentHubViewState extends State<ContentHubView> {
                                         .textTheme
                                         .bodyMedium
                                         ?.color,
-                                    fontSize: 11,
+                                    fontSize: 9.8,
                                   ),
                                 ),
                               ],
@@ -170,16 +170,19 @@ class _ContentHubViewState extends State<ContentHubView> {
           // Explore by Topic
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
               child: Text(
                 'Explore by Topic',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 44,
+              height: 38,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -192,9 +195,14 @@ class _ContentHubViewState extends State<ContentHubView> {
                     'Reflections',
                   ])
                     Padding(
-                      padding: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.only(right: 6),
                       child: ChoiceChip(
-                        label: Text(topic),
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        label: Text(
+                          topic,
+                          style: const TextStyle(fontSize: 10.5),
+                        ),
                         selected: _selectedTopic == topic,
                         onSelected: (_) =>
                             setState(() => _selectedTopic = topic),
@@ -207,7 +215,7 @@ class _ContentHubViewState extends State<ContentHubView> {
           // Holy Qur'an Reciters Shelf
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
               child: DuyaSectionHeader(
                 title: 'Holy Qur’an',
                 onActionTap: () => context.push('/content/quran'),
@@ -216,18 +224,18 @@ class _ContentHubViewState extends State<ContentHubView> {
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 158,
+              height: 130,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: repo.reciters.length,
-                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                separatorBuilder: (_, _) => const SizedBox(width: 10),
                 itemBuilder: (context, index) {
                   final reciter = repo.reciters[index];
                   return SizedBox(
-                    width: 210,
+                    width: 188,
                     child: DuyaCard(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(12),
                       onTap: () =>
                           context.push('/content/quran?reciter=${reciter.id}'),
                       child: Column(
@@ -236,19 +244,19 @@ class _ContentHubViewState extends State<ContentHubView> {
                           Row(
                             children: [
                               const CircleAvatar(
-                                radius: 18,
+                                radius: 15,
                                 backgroundColor: Color(0xFFE7F3EE),
                                 child: Icon(
                                   Icons.record_voice_over,
                                   color: DuyaColors.emerald,
-                                  size: 18,
+                                  size: 15,
                                 ),
                               ),
                               const Spacer(),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 9,
-                                  vertical: 4,
+                                  horizontal: 8,
+                                  vertical: 3,
                                 ),
                                 decoration: BoxDecoration(
                                   color: DuyaColors.desertGoldSoft,
@@ -257,7 +265,7 @@ class _ContentHubViewState extends State<ContentHubView> {
                                 child: const Icon(
                                   Icons.volume_up,
                                   color: DuyaColors.emerald,
-                                  size: 15,
+                                  size: 13,
                                 ),
                               ),
                             ],
@@ -268,11 +276,12 @@ class _ContentHubViewState extends State<ContentHubView> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 13,
+                              fontSize: 11.2,
                               fontWeight: FontWeight.w700,
+                              height: 1.2,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 3),
                           Text(
                             '${reciter.surahCount} Surahs • ${reciter.style}',
                             maxLines: 1,
@@ -280,7 +289,7 @@ class _ContentHubViewState extends State<ContentHubView> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(fontSize: 10.5),
+                                ?.copyWith(fontSize: 9.5),
                           ),
                         ],
                       ),
@@ -292,9 +301,10 @@ class _ContentHubViewState extends State<ContentHubView> {
           ),
           // Duas & Athkar Spotlight
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 18, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
             sliver: SliverToBoxAdapter(
               child: DuyaCard(
+                padding: const EdgeInsets.all(12),
                 onTap: () => context.push('/content/duas'),
                 color: DuyaColors.desertGoldSoft,
                 child: const Row(
@@ -302,9 +312,9 @@ class _ContentHubViewState extends State<ContentHubView> {
                     Icon(
                       Icons.volunteer_activism_outlined,
                       color: DuyaColors.emerald,
-                      size: 30,
+                      size: 24,
                     ),
-                    SizedBox(width: 14),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,21 +323,26 @@ class _ContentHubViewState extends State<ContentHubView> {
                             'Duas & Daily Athkar',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
-                              fontSize: 13.5,
+                              fontSize: 11.8,
                               color: DuyaColors.textPrimaryLight,
                             ),
                           ),
+                          SizedBox(height: 2),
                           Text(
                             'Authentic supplications with built-in Tasbih counter',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 9.8,
                               color: DuyaColors.textSecondaryLight,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Icon(Icons.arrow_forward, color: DuyaColors.emerald),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: DuyaColors.emerald,
+                      size: 18,
+                    ),
                   ],
                 ),
               ),
@@ -336,7 +351,7 @@ class _ContentHubViewState extends State<ContentHubView> {
           // Rituals, Hajj Journey, Manasik & Reflections
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
               child: DuyaSectionHeader(
                 title: 'Rituals, Hajj & Reflections',
                 onActionTap: () => context.push('/content/articles'),
@@ -344,22 +359,23 @@ class _ContentHubViewState extends State<ContentHubView> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
             sliver: SliverList.separated(
               itemCount: filteredArticles.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final art = filteredArticles[index];
                 return DuyaCard(
+                  padding: const EdgeInsets.all(11),
                   onTap: () => context.push('/content/articles/${art.id}'),
                   child: Row(
                     children: [
                       Container(
-                        width: 44,
-                        height: 44,
+                        width: 38,
+                        height: 38,
                         decoration: BoxDecoration(
                           color: const Color(0xFFE7F3EE),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(9),
                         ),
                         child: Icon(
                           art.mediaKind == 'audio'
@@ -368,9 +384,10 @@ class _ContentHubViewState extends State<ContentHubView> {
                                   ? Icons.play_circle_outline
                                   : Icons.article_outlined,
                           color: DuyaColors.emerald,
+                          size: 18,
                         ),
                       ),
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,26 +396,33 @@ class _ContentHubViewState extends State<ContentHubView> {
                               art.topic.toUpperCase(),
                               style: const TextStyle(
                                 color: DuyaColors.desertGold,
-                                fontSize: 9.5,
+                                fontSize: 8.8,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               art.titleEn,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
-                                fontSize: 13,
+                                fontSize: 11.2,
                               ),
                             ),
                             Text(
                               '${art.speakerOrAuthor} • ${art.durationOrReadTime}',
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontSize: 9.8),
                             ),
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right),
+                      const Icon(Icons.chevron_right, size: 18),
                     ],
                   ),
                 );

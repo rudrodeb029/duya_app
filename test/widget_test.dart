@@ -335,15 +335,15 @@ void main() {
 
       await tester.tap(find.byTooltip('Journey'));
       await tester.pumpAndSettle();
-      expect(find.text('Your Journey'), findsOneWidget);
+      expect(find.text('Journey'), findsWidgets);
 
       await tester.tap(find.byTooltip('Content'));
       await tester.pumpAndSettle();
-      expect(find.text('Content Hub'), findsOneWidget);
+      expect(find.text('Content'), findsWidgets);
 
       await tester.tap(find.byTooltip('Market'));
       await tester.pumpAndSettle();
-      expect(find.text('Duya Market'), findsOneWidget);
+      expect(find.text('Market'), findsWidgets);
     });
 
     testWidgets('Daily Challenge intro enters Doors hub and Duya AI responds',
@@ -357,7 +357,11 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Umrah Knowledge Challenge'), findsOneWidget);
+      expect(find.text('Challenge'), findsOneWidget);
+      await tester.ensureVisible(find.byType(Checkbox));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(Checkbox));
+      await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Play Now'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Play Now'));
@@ -374,7 +378,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Duya AI Companion'), findsOneWidget);
+      expect(find.text('Duya AI'), findsOneWidget);
     });
   });
 }

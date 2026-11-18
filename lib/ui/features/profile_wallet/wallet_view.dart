@@ -16,7 +16,7 @@ class WalletView extends StatelessWidget {
     final formatted = NumberFormat('#,##0.00').format(repo.convertedBalance);
 
     return DuyaSubpageScaffold(
-      title: 'Duya Wallet',
+      title: 'Wallet',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

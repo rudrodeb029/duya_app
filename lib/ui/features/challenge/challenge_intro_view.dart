@@ -6,13 +6,20 @@ import '../../core/widgets/duya_widgets.dart';
 import '../../core/widgets/islamic_patterns.dart';
 
 /// Challenge Intro screen explaining daily Ilm, referrals & draw entry rules.
-class ChallengeIntroView extends StatelessWidget {
+class ChallengeIntroView extends StatefulWidget {
   const ChallengeIntroView({super.key});
+
+  @override
+  State<ChallengeIntroView> createState() => _ChallengeIntroViewState();
+}
+
+class _ChallengeIntroViewState extends State<ChallengeIntroView> {
+  bool _agreedToTerms = false;
 
   @override
   Widget build(BuildContext context) {
     return DuyaSubpageScaffold(
-      title: 'Umrah Knowledge Challenge',
+      title: 'Challenge',
       body: SafeArea(
         top: false,
         child: LayoutBuilder(
@@ -109,39 +116,65 @@ class ChallengeIntroView extends StatelessWidget {
                   Column(
                     children: [
                       const SizedBox(height: 16),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 8,
-                          ),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          showDialog<void>(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: const Text('Terms & Conditions'),
-                              content: const Text(
-                                'Participation in the Duya Knowledge Challenge is completely free. Daily draws are open to eligible users with completed nationality details.',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: Checkbox(
+                              value: _agreedToTerms,
+                              onChanged: (val) => setState(
+                                () => _agreedToTerms = val ?? false,
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(ctx).pop(),
-                                  child: const Text('Close'),
-                                ),
-                              ],
+                              activeColor: DuyaColors.emerald,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: VisualDensity.compact,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
                             ),
-                          );
-                        },
-                        child: const Text(
-                          'By proceeding, you agree to Terms & Conditions',
-                          style: TextStyle(
-                            fontSize: 10.0,
-                            fontWeight: FontWeight.w500,
                           ),
-                        ),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                minimumSize: Size.zero,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 4,
+                                ),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              onPressed: () {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text('Terms & Conditions'),
+                                    content: const Text(
+                                      'Participation in the Duya Knowledge Challenge is completely free. Daily draws are open to eligible users with completed nationality details.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(ctx).pop(),
+                                        child: const Text('Close'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'By proceeding, you agree to Terms & Conditions',
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       SizedBox(
@@ -154,7 +187,9 @@ class ChallengeIntroView extends StatelessWidget {
                               horizontal: 16,
                             ),
                           ),
-                          onPressed: () => context.go('/challenge/play'),
+                          onPressed: _agreedToTerms
+                              ? () => context.go('/challenge/play')
+                              : null,
                           child: const Text(
                             'Play Now',
                             style: TextStyle(

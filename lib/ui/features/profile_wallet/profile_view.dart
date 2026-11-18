@@ -16,7 +16,7 @@ class ProfileView extends StatelessWidget {
     final profile = auth.profile;
 
     return DuyaSubpageScaffold(
-      title: 'Profile & Preferences',
+      title: 'Profile',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

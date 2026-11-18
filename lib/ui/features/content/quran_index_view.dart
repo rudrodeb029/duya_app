@@ -53,7 +53,7 @@ class _QuranIndexViewState extends State<QuranIndexView>
     }).toList();
 
     return DuyaSubpageScaffold(
-      title: 'The Holy Qur’an',
+      title: 'Qur’an',
       headerBottom: Container(
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.9),

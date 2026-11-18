@@ -25,7 +25,7 @@ class _FlightsViewState extends State<FlightsView> {
         : repo.flights.where((f) => f.cabinClass == _cabinFilter).toList();
 
     return DuyaSubpageScaffold(
-      title: 'Flights to Makkah & Madinah',
+      title: 'Flights',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

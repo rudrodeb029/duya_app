@@ -25,7 +25,7 @@ class _HotelsViewState extends State<HotelsView> {
         : repo.hotels.where((h) => h.city == _city).toList();
 
     return DuyaSubpageScaffold(
-      title: 'Haram-Side Hotels',
+      title: 'Hotels',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

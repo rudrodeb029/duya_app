@@ -16,7 +16,7 @@ class BookingsView extends StatelessWidget {
     final permitRepo = context.watch<PrayerRitualRepository>();
 
     return DuyaSubpageScaffold(
-      title: 'My Bookings & Permits',
+      title: 'Bookings',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

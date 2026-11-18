@@ -22,7 +22,7 @@ class MotawefView extends StatelessWidget {
     final step = steps[activeIdx];
 
     return DuyaSubpageScaffold(
-      title: isArabic ? 'دليل المطوّف' : 'Motawef Guide',
+      title: isArabic ? 'دليل المطوّف' : 'Motawef',
       headerBottom: SizedBox(
         height: 40,
         child: ListView.separated(

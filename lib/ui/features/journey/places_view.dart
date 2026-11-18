@@ -24,7 +24,7 @@ class _PlacesViewState extends State<PlacesView> {
         : repo.places.where((p) => p.category == _category).toList();
 
     return DuyaSubpageScaffold(
-      title: 'Places & Heritage Dining',
+      title: 'Places',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

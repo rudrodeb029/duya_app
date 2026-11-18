@@ -21,7 +21,7 @@ class PrayerTimesView extends StatelessWidget {
     final schedule = repo.getSchedule();
 
     return DuyaSubpageScaffold(
-      title: isArabic ? 'مواقيت الصلاة' : 'Prayer Times',
+      title: isArabic ? 'مواقيت الصلاة' : 'Prayers',
       actions: [
         DuyaCircleActionButton(
           icon: Icons.explore_outlined,

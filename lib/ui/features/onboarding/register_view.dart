@@ -41,7 +41,7 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return DuyaSubpageScaffold(
-      title: 'Create Account',
+      title: 'Register',
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         child: Form(

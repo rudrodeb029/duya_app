@@ -20,7 +20,7 @@ class MarketCategoryView extends StatelessWidget {
     final products = repo.productsForCategory(categoryId);
 
     return DuyaSubpageScaffold(
-      title: categoryId == 'all' ? 'All Products' : categoryId.toUpperCase(),
+      title: categoryId == 'all' ? 'Products' : categoryId.toUpperCase(),
       actions: [
         DuyaCircleActionButton(
           icon: Icons.shopping_bag_outlined,

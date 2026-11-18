@@ -40,7 +40,7 @@ class _TripBuilderViewState extends State<TripBuilderView> {
   @override
   Widget build(BuildContext context) {
     return DuyaSubpageScaffold(
-      title: 'AI Trip Planner',
+      title: 'Trip Plan',
       subtitle: 'Custom Makkah & Madinah itinerary',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),

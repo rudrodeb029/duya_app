@@ -27,7 +27,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     final product = repo.getProductById(widget.productId);
 
     return DuyaSubpageScaffold(
-      title: 'Product Details',
+      title: 'Product',
       actions: [
         DuyaCircleActionButton(
           icon: Icons.shopping_bag_outlined,

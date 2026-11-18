@@ -29,7 +29,7 @@ class _QiblaCompassViewState extends State<QiblaCompassView> {
     final aligned = ((qiblaDeg - _deviceHeadingDeg).abs() % 360) < 8;
 
     return DuyaSubpageScaffold(
-      title: isArabic ? 'اتجاه القبلة' : 'Qibla Compass',
+      title: isArabic ? 'اتجاه القبلة' : 'Qibla',
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
         child: Column(

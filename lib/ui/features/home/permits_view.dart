@@ -36,7 +36,7 @@ class _PermitsViewState extends State<PermitsView> {
     }).toList();
 
     return DuyaSubpageScaffold(
-      title: 'Al-Rawdah & Umrah Permits',
+      title: 'Permits',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

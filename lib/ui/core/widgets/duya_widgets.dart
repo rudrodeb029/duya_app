@@ -623,13 +623,13 @@ Future<void> showLocationPermissionSheet(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (ctx) => Padding(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 64,
-            height: 64,
+            width: 48,
+            height: 48,
             decoration: const BoxDecoration(
               color: DuyaColors.desertGoldSoft,
               shape: BoxShape.circle,
@@ -637,37 +637,67 @@ Future<void> showLocationPermissionSheet(
             child: const Icon(
               Icons.location_on_outlined,
               color: DuyaColors.desertGold,
-              size: 32,
+              size: 24,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             'Enable Location Services',
-            style: Theme.of(ctx).textTheme.headlineSmall,
+            style: Theme.of(ctx).textTheme.titleMedium?.copyWith(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             'Allow Duya to calculate exact prayer times, smart Adhan reminders, and accurate Qibla direction for your current city.',
-            style: Theme.of(ctx).textTheme.bodyMedium,
+            style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
+                  fontSize: 10.5,
+                  height: 1.4,
+                ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 18),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 40),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 16,
+                ),
+              ),
               onPressed: () {
                 onEnableLocation();
                 Navigator.of(ctx).pop();
               },
-              icon: const Icon(Icons.my_location),
-              label: const Text('Enable Location'),
+              icon: const Icon(Icons.my_location, size: 16),
+              label: const Text(
+                'Enable Location',
+                style: TextStyle(
+                  fontSize: 11.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 8),
           TextButton(
+            style: TextButton.styleFrom(
+              minimumSize: Size.zero,
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Select City Manually Later'),
+            child: const Text(
+              'Select City Manually Later',
+              style: TextStyle(
+                fontSize: 10.5,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ],
       ),

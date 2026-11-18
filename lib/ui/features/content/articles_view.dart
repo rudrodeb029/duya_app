@@ -25,7 +25,7 @@ class _ArticlesLibraryViewState extends State<ArticlesLibraryView> {
         : repo.ritualArticles.where((a) => a.topic == _topic).toList();
 
     return DuyaSubpageScaffold(
-      title: 'Rituals, Hajj & Manasik',
+      title: 'Guides',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [

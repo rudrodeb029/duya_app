@@ -144,7 +144,7 @@ class _ChallengeWinnersViewState extends State<ChallengeWinnersView>
 
     return ChallengeScaffold(
       currentIndex: 1,
-      title: 'Raffle Draw',
+      title: 'Raffle',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
         children: [

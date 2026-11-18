@@ -112,7 +112,7 @@ class _AllServicesViewState extends State<AllServicesView> {
     }).toList();
 
     return DuyaSubpageScaffold(
-      title: 'All Duya Services',
+      title: 'Services',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
         children: [
